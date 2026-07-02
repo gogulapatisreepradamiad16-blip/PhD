@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesis Digital Appendix — Parametric Craft & Modular Jaali Systems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FBF9F6;
+            color: #333333;
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <header class="border-b border-stone-200 bg-white py-10 px-6 sm:px-12 text-center shadow-sm">
+        <div class="max-w-5xl mx-auto">
+            <span class="text-xs font-semibold tracking-widest text-amber-700 uppercase bg-amber-50 px-3 py-1 rounded-full">PhD Research Repository</span>
+            <h1 class="serif-title text-3xl sm:text-4xl mt-3 font-bold text-stone-800">
+                Modular Triangular Screen System with Adjustable Light Modulation
+            </h1>
+            <p class="mt-2 text-stone-600 max-w-2xl mx-auto font-medium">
+                Digital Appendix & Interactive Compendium
+            </p>
+            <div class="mt-4 flex justify-center gap-6 text-xs text-stone-500 border-t border-stone-100 pt-4 max-w-md mx-auto">
+                <div><strong>Author:</strong> G. Sreeprada</div>
+                <div><strong>Institution:</strong> IIT Hyderabad</div>
+                <div><strong>Department:</strong> Design</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 flex-grow w-full">
+        
+        <section class="mb-14">
+            <div class="flex items-center gap-3 mb-6 border-b border-stone-200 pb-2">
+                <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                </span>
+                <h2 class="serif-title text-2xl font-semibold text-stone-800">Interactive Generators & Calculators</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold text-stone-800 text-lg">Parametric Grid Generator</h3>
+                            <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium">App</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-4">`grid_parametric.html`</p>
+                        <p class="text-sm text-stone-600">Dynamic UI application for defining cell size, hole percentage, inset, rotation, and jitter configurations for localized tiles.</p>
+                    </div>
+                    <a href="grid_parametric.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2 px-4 rounded transition">Launch Tool &rarr;</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold text-stone-800 text-lg">Void Percentage (VP) Engine</h3>
+                            <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium">App</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-4">`VP_new.html` / `VP.html`</p>
+                        <p class="text-sm text-stone-600">Calculates precise geometric parameters (inner triangle offset, thicknesses) based on target mathematical solid-to-void thresholds.</p>
+                    </div>
+                    <a href="VP_new.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2 px-4 rounded transition">Launch Tool &rarr;</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold text-stone-800 text-lg">Multi-Row Screen Array</h3>
+                            <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium">App</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-4">`VP_multirow.html`</p>
+                        <p class="text-sm text-stone-600">Generates matrices of complex interlocking arrays to calculate global structural transformations across multiple sequential grid rows.</p>
+                    </div>
+                    <a href="VP_multirow.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2 px-4 rounded transition">Launch Tool &rarr;</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold text-stone-800 text-lg">Image Void Slider & Analyzer</h3>
+                            <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium">App</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-4">`jaalivoidslider.html`</p>
+                        <p class="text-sm text-stone-600">Canvas-based pixel manipulator that dilates or erodes black/white image frames to analyze target architectural transparency metrics.</p>
+                    </div>
+                    <a href="jaalivoidslider.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2 px-4 rounded transition">Launch Tool &rarr;</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold text-stone-800 text-lg">Mughal Pattern Creator</h3>
+                            <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium">App</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-4">`JAALICREATOR.HTML`</p>
+                        <p class="text-sm text-stone-600">Generates traditional star and polygon compositions derived from foundational geometric frameworks with color and line scale controls.</p>
+                    </div>
+                    <a href="JAALICREATOR.HTML" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2 px-4 rounded transition">Launch Tool &rarr;</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold text-stone-800 text-lg">Structural Replication Array</h3>
+                            <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium">App</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-4">`repetationvariousjaali.html`</p>
+                        <p class="text-sm text-stone-600">Simulates macro architectural screens using acute, obtuse, and median parameter families based on the 'Flower of Life' geometry.</p>
+                    </div>
+                    <a href="repetationvariousjaali.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2 px-4 rounded transition">Launch Tool &rarr;</a>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="mb-6">
+            <div class="flex items-center gap-3 mb-6 border-b border-stone-200 pb-2">
+                <span class="p-2 bg-amber-50 text-amber-700 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </span>
+                <h2 class="serif-title text-2xl font-semibold text-stone-800">Intellectual Property & Documentation</h2>
+            </div>
+
+            <div class="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden">
+                <table class="min-w-full divide-y divide-stone-200 text-left text-sm">
+                    <thead class="bg-stone-50 text-stone-600 font-medium text-xs uppercase tracking-wider">
+                        <tr>
+                            <th class="px-6 py-4">Document / Component Title</th>
+                            <th class="px-6 py-4">Type</th>
+                            <th class="px-6 py-4">Filing Status / Focus</th>
+                            <th class="px-6 py-4 text-right">Reference Link</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-stone-100 text-stone-700">
+                        
+                        <tr class="hover:bg-stone-50/50">
+                            <td class="px-6 py-4 font-medium text-stone-900">System for Forming Three-Dimensional Geometric or Free-Form Structures</td>
+                            <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-purple-50 text-purple-700 font-medium">Patent Spec</span></td>
+                            <td class="px-6 py-4 text-stone-500">Granted Indian Patent (IN590898 B1) — Full Specification</td>
+                            <td class="px-6 py-4 text-right"><a href="GRANTED_20PATENT_20SPECIFICATION_20590898.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                        </tr>
+
+                        <tr class="hover:bg-stone-50/50">
+                            <td class="px-6 py-4 font-medium text-stone-900">Modular Block Design Registration</td>
+                            <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-blue-50 text-blue-700 font-medium">Design Reg</span></td>
+                            <td class="px-6 py-4 text-stone-500">Interlocking component forms & structural configuration schemas</td>
+                            <td class="px-6 py-4 text-right"><a href="BLOCKS_Design Registration.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                        </tr>
+
+                        <tr class="hover:bg-stone-50/50">
+                            <td class="px-6 py-4 font-medium text-stone-900">Modular Casting Mould Design Registration</td>
+                            <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-blue-50 text-blue-700 font-medium">Design Reg</span></td>
+                            <td class="px-6 py-4 text-stone-500">Flexible core stump configurations for variable cast outputs</td>
+                            <td class="px-6 py-4 text-right"><a href="Mould_Design Registration1.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                        </tr>
+
+                        <tr class="hover:bg-stone-50/50">
+                            <td class="px-6 py-4 font-medium text-stone-900">Interlocking 3D Puzzle Systems</td>
+                            <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-blue-50 text-blue-700 font-medium">Design Reg</span></td>
+                            <td class="px-6 py-4 text-stone-500">Educational/recreational multi-directional tool-free frameworks</td>
+                            <td class="px-6 py-4 text-right"><a href="3DPUZZLES.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                        </tr>
+
+                        <tr class="hover:bg-stone-50/50">
+                            <td class="px-6 py-4 font-medium text-stone-900">Utility Application for Modular Triangular Screen System</td>
+                            <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-amber-50 text-amber-800 font-medium">Utility Draft</span></td>
+                            <td class="px-6 py-4 text-stone-500">Underpinning parameters and frameless installation descriptions</td>
+                            <td class="px-6 py-4 text-right"><a href="Utility Patent Application for Modular Triangular.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                        </tr>
+
+                        <tr class="hover:bg-stone-50/50">
+                            <td class="px-6 py-4 font-medium text-stone-900">Chapter 1 Excerpt: The Elastic Vernacular</td>
+                            <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-stone-100 text-stone-700 font-medium">Thesis Text</span></td>
+                            <td class="px-6 py-4 text-stone-500">Theoretical critiques of digital hylomorphism vs. parametric craft</td>
+                            <td class="px-6 py-4 text-right"><a href="doing 14what.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                        </tr>
+
+                        <tr class="hover:bg-stone-50/50">
+                            <td class="px-6 py-4 font-medium text-stone-900">Mathematical Trigonometry Derivations</td>
+                            <td class="px-6 py-4"><span class="px-2 py-0.5 text-xs rounded bg-stone-100 text-stone-700 font-medium">Derivations</span></td>
+                            <td class="px-6 py-4 text-stone-500">Coordinate mapping scripts ($\sin 30^\circ$, centroid limits, thickness ratios)</td>
+                            <td class="px-6 py-4 text-right"><a href="Void Percentage Calculation.docx" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View DOCX &rarr;</a></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-6 text-center text-xs border-t border-stone-800">
+        <p>&copy; 2026 Department of Design, Indian Institute of Technology Hyderabad. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
