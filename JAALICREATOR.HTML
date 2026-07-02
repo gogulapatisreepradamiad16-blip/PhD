@@ -15,6 +15,9 @@
         canvas {
             cursor: pointer;
             transition: transform 0.2s ease-in-out;
+            display: block;
+            width: 100%;
+            height: 100%;
         }
         canvas:hover {
             transform: scale(1.01);
@@ -69,16 +72,13 @@
     <div class="w-full max-w-6xl bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Mughal Jaali Pattern Generator</h1>
-            <p class="text-slate-600 mt-2 max-w-2xl mx-auto">Inspired by the timeless geometric art of Mughal architecture. Customize and create your own intricate Jaali screen designs.</p>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Canvas for drawing the pattern -->
-            <div class="lg:col-span-2 rounded-xl overflow-hidden shadow-inner bg-slate-200">
+            <div id="canvasWrapper" class="lg:col-span-2 rounded-xl overflow-hidden shadow-inner bg-slate-200 flex items-center justify-center aspect-square w-full">
                 <canvas id="jaaliCanvas"></canvas>
             </div>
 
-            <!-- Control Panel -->
             <div class="control-panel bg-slate-50/80 p-6 rounded-xl border border-slate-200">
                 <h2 class="text-xl font-semibold mb-5 text-slate-800">Customize Your Pattern</h2>
                 
@@ -88,7 +88,6 @@
                         <option value="mughalHexStar">Mughal Hexagon & Star</option>
                         <option value="eightPointRosette">Eight-Point Rosette</option>
                         <option value="twelvePointStar">Twelve-Point Star</option>
-                        <option value="agraWeave">Agra Weave</option>
                         <option value="hexRosetteGrid">Hexagonal Rosette Grid</option>
                     </select>
                 </div>
@@ -108,11 +107,11 @@
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div>
                         <label for="solidColorPicker">Solid Color</label>
-                        <input type="color" id="solidColorPicker" value="#475569">
+                        <input type="color" id="solidColorPicker" value="#1e293b">
                     </div>
                     <div>
                         <label for="voidColorPicker">Void Color</label>
-                        <input type="color" id="voidColorPicker" value="#f1f5f9">
+                        <input type="color" id="voidColorPicker" value="#ffffff">
                     </div>
                 </div>
 
@@ -127,6 +126,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const canvas = document.getElementById('jaaliCanvas');
             const ctx = canvas.getContext('2d');
+            const wrapper = document.getElementById('canvasWrapper');
             
             // UI Controls
             const ui = {
@@ -140,18 +140,18 @@
                 downloadBtn: document.getElementById('downloadBtn'),
             };
 
-            // State
+            // State - Adjusted to high-contrast styles immediately
             const state = {
                 pattern: 'mughalHexStar',
                 voidSize: 0.75,
                 scale: 80,
-                solidColor: '#475569',
-                voidColor: '#f1f5f9',
+                solidColor: '#1e293b',
+                voidColor: '#ffffff',
             };
 
             function resizeCanvas() {
-                const container = canvas.parentElement;
-                const size = container.clientWidth;
+                // Read exact layout box measurements
+                const size = wrapper.clientWidth || 500;
                 canvas.width = size;
                 canvas.height = size;
                 draw();
@@ -159,8 +159,13 @@
             
             // --- Main Drawing Function ---
             function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw base framework panel matrix color
                 ctx.fillStyle = state.solidColor;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Target window carving cutout color
                 ctx.fillStyle = state.voidColor;
 
                 const patternDrawer = patternDrawers[state.pattern];
@@ -174,11 +179,12 @@
                 mughalHexStar: drawMughalHexStar,
                 eightPointRosette: drawEightPointRosette,
                 twelvePointStar: drawTwelvePointStar,
-                agraWeave: drawAgraWeave,
                 hexRosetteGrid: drawHexRosetteGrid,
             };
 
+            // --- Helper Shapes ---
             function drawPolygon(ctx, x, y, radius, sides) {
+                if (radius <= 0) return;
                 ctx.beginPath();
                 for (let i = 0; i < sides; i++) {
                     const angle = (i / sides) * 2 * Math.PI;
@@ -199,9 +205,7 @@
                         const x = i * r * 1.5;
                         const y = j * h / 2;
                         if ((i + j) % 2 === 0) {
-                             // Draw central hexagon void
                              drawPolygon(ctx, x, y, r / 2 * voidSize, 6);
-                             // Draw star point voids (rhombi)
                              for(let k=0; k<6; k++) {
                                 const angle = k * Math.PI / 3;
                                 const hx = x + r * 0.75 * Math.cos(angle);
@@ -245,14 +249,12 @@
                          const x = i * r * 1.5;
                          const y = j * h + (i % 2) * h / 2;
                          
-                         // Dodecagon void
                          ctx.save();
                          ctx.translate(x,y);
                          ctx.rotate(Math.PI / 12);
                          drawPolygon(ctx, 0, 0, r * 0.6 * voidSize, 12);
                          ctx.restore();
 
-                         // Triangle voids
                          for(let k=0; k<6; k++) {
                              const angle = k * Math.PI / 3 + Math.PI/6;
                              const tx = x + r * 0.86 * Math.cos(angle);
@@ -263,27 +265,6 @@
                              drawPolygon(ctx, 0, 0, r*0.2 * voidSize, 3);
                              ctx.restore();
                          }
-                    }
-                }
-            }
-
-            function drawAgraWeave(ctx, width, height, scale, voidSize) {
-                const gridSize = scale;
-                for (let j = -1; j < height / gridSize + 1; j++) {
-                    for (let i = -1; i < width / gridSize + 1; i++) {
-                        const x = i * gridSize;
-                        const y = j * gridSize;
-                        const v = gridSize * voidSize;
-                        const s = (gridSize - v) / 2;
-
-                        ctx.beginPath();
-                        ctx.moveTo(x + s, y + s);
-                        ctx.lineTo(x + v + s, y + s);
-                        ctx.arc(x + v + s, y + s + v/2, v/2, -Math.PI/2, Math.PI/2);
-                        ctx.lineTo(x + s, y + s + v);
-                        ctx.arc(x + s, y + s + v/2, v/2, Math.PI/2, -Math.PI/2, true);
-                        ctx.closePath();
-                        ctx.fill();
                     }
                 }
             }
@@ -302,7 +283,6 @@
                     }
                 }
             }
-
 
             // --- Event Listeners ---
             function setupEventListeners() {
@@ -345,7 +325,6 @@
             
             // --- Initial Setup ---
             function init() {
-                // Set initial values from state to UI
                 ui.patternSelect.value = state.pattern;
                 ui.voidSizeSlider.value = state.voidSize;
                 ui.voidSizeValue.textContent = state.voidSize.toFixed(2);
@@ -355,7 +334,11 @@
                 ui.voidColorPicker.value = state.voidColor;
 
                 setupEventListeners();
-                resizeCanvas();
+                
+                // Allow CSS layout parsing to settle completely before painting geometry
+                requestAnimationFrame(() => {
+                    setTimeout(resizeCanvas, 50);
+                });
             }
 
             init();
@@ -363,4 +346,3 @@
     </script>
 </body>
 </html>
-
