@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parametric Interlocking Multi-Row Array Processor — G. Sreeprada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FBF9F6; color: #333333; }
+        .serif-title { font-family: 'Playfair Display', serif; }
+        .grid-cell-btn { transition: all 0.2s ease-in-out; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-xl border border-stone-200 overflow-hidden">
+        <header class="bg-stone-900 text-white p-6 md:p-8 border-b border-stone-800">
+            <span class="text-xs font-semibold tracking-widest text-amber-400 uppercase bg-amber-950/50 px-3 py-1 rounded-full">Doctoral Appendix Framework: VP_multirow.html</span>
+            <h1 class="serif-title text-2xl md:text-3xl font-bold mt-3 text-stone-100">Interlocking Modular Screen System Array Generator</h1>
+            <p class="text-stone-400 text-sm mt-1">Granular localized void manipulation across uniform base modular profiles.</p>
+        </header>
+
+        <div class="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-stone-200">
+            
+            <div class="w-full lg:w-1/3 p-6 bg-stone-50/50 space-y-6 flex-shrink-0">
+                <div>
+                    <h2 class="text-sm font-bold text-stone-800 uppercase tracking-wider mb-4">1. Global Geometry Constraints</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Side Length (s) cm</label>
+                            <input id="sideInput" type="number" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="30">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Wall Frame (gap) cm</label>
+                            <input id="gapInput" type="number" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="5">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Mating Depth (t) cm</label>
+                            <input id="thicknessInput" type="number" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="2">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Default Void %</label>
+                            <input id="defaultVpInput" type="number" min="0" max="37.24" step="1" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="15">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-sm font-bold text-stone-800 uppercase tracking-wider mb-4">2. Array Dimensional Bounds</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Columns</label>
+                            <input id="colsInput" type="number" min="1" max="12" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="6">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Rows</label>
+                            <input id="rowsInput" type="number" min="1" max="6" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="3">
+                        </div>
+                    </div>
+                    <button id="initializeGridBtn" class="w-full mt-4 bg-stone-800 hover:bg-stone-950 text-white text-xs font-bold py-2.5 px-4 rounded-lg transition shadow-sm">
+                        Reconstruct Array Layout
+                    </button>
+                </div>
+
+                <div id="localizedControllerPanel" class="p-4 bg-amber-50/60 border border-amber-200/70 rounded-xl space-y-3 hidden">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-amber-900 uppercase tracking-wide">Cell Customization Panel</h3>
+                        <span id="selectedCellLabel" class="text-xs font-mono bg-amber-200/60 text-amber-900 px-2 py-0.5 rounded font-medium">Row: 0, Col: 0</span>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-medium text-stone-700">Target Local Void Space</label>
+                            <span id="localVpDisplay" class="text-xs font-mono font-bold text-amber-900">15.00%</span>
+                        </div>
+                        <input id="cellVpSlider" type="range" min="0.1" max="37.24" step="0.01" class="w-full accent-stone-700">
+                        <span class="text-[10px] text-stone-400 block mt-0.5">Absolute analytical limit bound: 37.24%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-2/3 p-6 flex flex-col justify-between space-y-6 overflow-hidden">
+                <div>
+                    <h2 class="text-sm font-bold text-stone-800 uppercase tracking-wider mb-3">3. System Matrix Viewport</h2>
+                    <p class="text-xs text-stone-500 mb-4">Click any cell element below to dynamically override its specific light-transmission void properties.</p>
+                    
+                    <div class="w-full p-4 bg-stone-100 rounded-xl border border-stone-200 flex items-center justify-center overflow-auto max-h-[520px]">
+                        <div id="svgContainerWrapper" class="w-full flex items-center justify-center min-h-[300px]"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-sm font-bold text-stone-800 uppercase tracking-wider mb-3">4. Dynamic Mapping Matrix</h2>
+                    <div id="interactiveMapGrid" class="grid gap-2 p-3 bg-stone-50 border border-stone-200 rounded-xl overflow-x-auto min-h-[100px]"></div>
+                </div>
+
+                <div class="flex gap-4 border-t border-stone-100 pt-4">
+                    <div class="flex-grow">
+                        <label class="block text-[10px] font-bold text-stone-400 uppercase mb-1">Export Data Vector Specification</label>
+                        <textarea id="svgOutputDataBuffer" readonly class="w-full h-12 p-2 border border-stone-200 rounded-lg text-[10px] font-mono bg-stone-50 text-stone-500 select-all" placeholder="SVG trace sequence code blocks stream buffer..."></textarea>
+                    </div>
+                    <div class="flex items-end">
+                        <button id="downloadSvgDataBtn" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-3 px-5 rounded-lg transition whitespace-nowrap shadow-sm">
+                            Export Vector File (.svg)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const CM2PX = 37.79527559055118; 
+            const SR3 = Math.sqrt(3); 
+            const C1 = SR3 / (4 * SR3 - 2 * Math.PI); 
+
+            let systemState = {
+                s: 30, gap: 5, th: 2, defaultVp: 15, cols: 6, rows: 3,
+                cells: [], selectedCellIndex: null
+            };
+
+            const ui = {
+                side: document.getElementById('sideInput'),
+                gap: document.getElementById('gapInput'),
+                thickness: document.getElementById('thicknessInput'),
+                defaultVp: document.getElementById('defaultVpInput'),
+                cols: document.getElementById('colsInput'),
+                rows: document.getElementById('rowsInput'),
+                initBtn: document.getElementById('initializeGridBtn'),
+                mapGrid: document.getElementById('interactiveMapGrid'),
+                svgWrapper: document.getElementById('svgContainerWrapper'),
+                buffer: document.getElementById('svgOutputDataBuffer'),
+                downloadBtn: document.getElementById('downloadSvgDataBtn'),
+                localPanel: document.getElementById('localizedControllerPanel'),
+                cellLabel: document.getElementById('selectedCellLabel'),
+                cellVpSlider: document.getElementById('cellVpSlider'),
+                localVpLabel: document.getElementById('localVpDisplay')
+            };
+
+            function syncInputsWithState() {
+                systemState.s = parseFloat(ui.side.value) || 30;
+                systemState.gap = parseFloat(ui.gap.value) || 5;
+                systemState.th = parseFloat(ui.thickness.value) || 2;
+                systemState.defaultVp = parseFloat(ui.defaultVp.value) || 15;
+                systemState.cols = parseInt(ui.cols.value) || 6;
+                systemState.rows = parseInt(ui.rows.value) || 3;
+            }
+
+            function initializeSystemMatrix() {
+                syncInputsWithState();
+                systemState.cells = [];
+                systemState.selectedCellIndex = null;
+                ui.localPanel.classList.add('hidden');
+
+                for (let r = 0; r < systemState.rows; r++) {
+                    for (let c = 0; c < systemState.cols; c++) {
+                        const isUpright = (r + c) % 2 === 0;
+
+                        systemState.cells.push({
+                            row: r, col: c, isUpright, vp: systemState.defaultVp
+                        });
+                    }
+                }
+                renderInterfaceDashboard();
+            }
+
+            function renderInterfaceDashboard() {
+                renderInteractiveMap();
+                generateVectorMatrixOutput();
+            }
+
+            function renderInteractiveMap() {
+                ui.mapGrid.innerHTML = '';
+                ui.mapGrid.style.gridTemplateColumns = `repeat(${systemState.cols}, minmax(0, 1fr))`;
+
+                systemState.cells.forEach((cell, index) => {
+                    const cellBtn = document.createElement('button');
+                    cellBtn.className = `grid-cell-btn p-2 rounded-lg border text-left flex flex-col justify-between h-20 ${
+                        systemState.selectedCellIndex === index 
+                        ? 'border-amber-500 bg-amber-100/70 ring-2 ring-amber-400' 
+                        : 'border-stone-200 bg-white hover:bg-stone-50'
+                    }`;
+
+                    cellBtn.innerHTML = `
+                        <div class="flex justify-between items-center w-full">
+                            <span class="text-[10px] font-mono text-stone-400">R${cell.row} C${cell.col}</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-stone-700 text-white">Medium</span>
+                        </div>
+                        <div class="mt-2 flex justify-between items-end w-full">
+                            <span class="text-[10px] text-stone-500">${cell.isUpright ? '▲ Upright' : '▼ Inverted'}</span>
+                            <span class="text-xs font-bold text-stone-800 font-mono">${cell.vp.toFixed(1)}%</span>
+                        </div>
+                    `;
+
+                    cellBtn.addEventListener('click', () => selectCellInstance(index));
+                    ui.mapGrid.appendChild(cellBtn);
+                });
+            }
+
+            function selectCellInstance(index) {
+                systemState.selectedCellIndex = index;
+                const cell = systemState.cells[index];
+
+                ui.cellLabel.textContent = `Row: ${cell.row}, Col: ${cell.col}`;
+                ui.cellVpSlider.value = cell.vp;
+                ui.localVpLabel.textContent = `${cell.vp.toFixed(2)}%`;
+
+                ui.localPanel.classList.remove('hidden');
+                renderInteractiveMap();
+            }
+
+            ui.cellVpSlider.addEventListener('input', (e) => {
+                if (systemState.selectedCellIndex !== null) {
+                    const val = parseFloat(e.target.value);
+                    systemState.cells[systemState.selectedCellIndex].vp = val;
+                    ui.localVpLabel.textContent = `${val.toFixed(2)}%`;
+                    
+                    generateVectorMatrixOutput();
+                    
+                    const activeGridBtn = ui.mapGrid.children[systemState.selectedCellIndex];
+                    if (activeGridBtn) {
+                        const vpDisplaySpan = activeGridBtn.querySelector('.font-mono.text-xs');
+                        if (vpDisplaySpan) {
+                            vpDisplaySpan.textContent = `${val.toFixed(1)}%`;
+                        }
+                    }
+                }
+            });
+
+            function generateVectorMatrixOutput() {
+                const s = (systemState.s / 2) * CM2PX; 
+                const th = systemState.th * CM2PX;    
+                const h = s * SR3;                    
+
+                const colWidthStep = s; 
+                const rowHeightStep = h; 
+
+                const paddingShift = th * 4;
+                const totalWidth = colWidthStep * (systemState.cols + 1) + (paddingShift * 2);
+                const totalHeight = rowHeightStep * systemState.rows + (paddingShift * 2);
+
+                let svgContent = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n`; 
+                svgContent += `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}" width="100%" height="100%" style="background-color: #ffffff;">\n`;
+                svgContent += `  <g transform="translate(${paddingShift}, ${paddingShift})">\n`;
+
+                systemState.cells.forEach((cell) => {
+                    const deltaX = cell.col * colWidthStep;
+                    const deltaY = cell.row * rowHeightStep;
+
+                    svgContent += `    <g transform="translate(${deltaX}, ${deltaY})">\n`;
+                    if (cell.isUpright) {
+                        svgContent += generateUprightBlock(s, h, th, cell.vp);
+                    } else {
+                        svgContent += generateInvertedBlock(s, h, th, cell.vp);
+                    }
+                    svgContent += `    </g>\n`;
+                });
+
+                svgContent += `  </g>\n</svg>`;
+
+                ui.svgWrapper.innerHTML = svgContent;
+                ui.buffer.value = svgContent;
+            }
+
+            // FIXED: Removed Male/Female paths to render clean uniform medium base blocks
+            function generateUprightBlock(s, h, th, vp) {
+                const b = s * Math.sqrt((vp / 100) * C1); 
+                const r = b * 2;                          
+                const R = (s + s) / SR3;                  
+                const innerRadius = (b + b) / SR3;        
+                const tInner = (s - b) / SR3;             
+
+                const Ap = { x: 0, y: h };
+                const Bp = { x: s, y: 0 };
+                const Cp = { x: s * 2, y: h };
+
+                const Gp = { x: s - b, y: h - tInner };
+                const Hp = { x: s, y: R - innerRadius };
+                const Ip = { x: s + b, y: h - tInner };
+
+                let pathStr = "";
+                pathStr += `      <path d="M ${Ap.x} ${Ap.y} L ${Bp.x} ${Bp.y} L ${Cp.x} ${Cp.y} Z" fill="#000000" stroke="#ffffff" stroke-width="1" />\n`;
+                pathStr += `      <path d="M ${Gp.x} ${Gp.y} A ${r} ${r} 0 0 1 ${Ip.x} ${Ip.y} A ${r} ${r} 0 0 1 ${Hp.x} ${Hp.y} A ${r} ${r} 0 0 1 ${Gp.x} ${Gp.y} Z" fill="#ffffff" />\n`;
+                return pathStr;
+            }
+
+            function generateInvertedBlock(s, h, th, vp) {
+                const b = s * Math.sqrt((vp / 100) * C1);
+                const r = b * 2;
+                const R = (s + s) / SR3;
+                const innerRadius = (b + b) / SR3;
+                const tInner = (s - b) / SR3;
+
+                const Bp = { x: 0, y: 0 };
+                const Ap = { x: s, y: h };
+                const Cp = { x: s * 2, y: 0 };
+
+                const Gp = { x: s - b, y: tInner };
+                const Hp = { x: s, y: h - (R - innerRadius) };
+                const Ip = { x: s + b, y: tInner };
+
+                let pathStr = "";
+                pathStr += `      <path d="M ${Bp.x} ${Bp.y} L ${Ap.x} ${Ap.y} L ${Cp.x} ${Cp.y} Z" fill="#000000" stroke="#ffffff" stroke-width="1" />\n`;
+                pathStr += `      <path d="M ${Gp.x} ${Gp.y} A ${r} ${r} 0 0 0 ${Ip.x} ${Ip.y} A ${r} ${r} 0 0 0 ${Hp.x} ${Hp.y} A ${r} ${r} 0 0 0 ${Gp.x} ${Gp.y} Z" fill="#ffffff" />\n`;
+                return pathStr;
+            }
+
+            ui.downloadBtn.addEventListener('click', () => {
+                const blob = new Blob([ui.buffer.value], { type: 'image/svg+xml;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `Sreeprada_MediumBlocks_JaaliMatrix_${systemState.cols}x${systemState.rows}.svg`;
+                link.click();
+            });
+
+            ui.initBtn.addEventListener('click', initializeSystemMatrix);
+
+            initializeSystemMatrix();
+        });
+    </script>
+</body>
+</html>
