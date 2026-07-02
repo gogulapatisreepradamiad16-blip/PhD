@@ -115,12 +115,8 @@ function main2(transform) {
 		transform.y = (transform.calc.Ap.y + transform.calc.Bp.y)/2;
 	}
 
-	/*
-	*/
 	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "All", "", "Male");
 	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Big", "black", "Male");
-	/*
-	*/
 	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Small", "black", "Male");
 	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Normal", "black", "Male");
 
@@ -128,8 +124,6 @@ function main2(transform) {
 	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Big", "black", "Female");
 	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Small", "black", "Female");
 	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Normal", "black", "Female");
-	/*
-	*/
 	
 	return false;
 }
@@ -221,13 +215,9 @@ function makeSVG(transform, A, B, C, G, H, I, s, h, b, t, target, color, blockTy
 	var targetDiv = "svg".concat(target).concat(blockType).concat("Div");
 	var outputTxt = "svg".concat(target).concat(blockType);
 	var svgdiv = document.getElementById(targetDiv);
-	//console.log(targetDiv);
-	//console.log(outputTxt);
 	svgdiv.innerHTML = svg;
 	var output = document.getElementById(outputTxt);
 	output.innerHTML = svg;
-	//console.log(targetDiv);
-	//console.log(outputTxt);
 	return svg;
 }
 function makeInner(transform, G, H, I, b, t) {
@@ -238,7 +228,6 @@ function makeInner(transform, G, H, I, b, t) {
 	var Hp = {x: H.x+xshift, y: H.y+yshift};
 	var Ip = {x: I.x+xshift, y: I.y+yshift};
 
-
 	var r = round(b+b);
     return makeInnerWall(transform, r, Gp, Ip, Hp);
 }
@@ -246,7 +235,6 @@ function makeInnerWall(transform, r, Gp, Ip, Hp) {
 	if (!transform.initialized) getXYRange(transform, Gp, Ip, Hp);
 	var rowReverse = transform.reverse;
 	var paths = "";
-	var direction = 1;
 	for (var i=0; i<transform.noRows; i++) {
 		var reverse = rowReverse;
 		for (var j=0; j<transform.noCols; j++) {
@@ -306,18 +294,6 @@ function makeOuter(transform, A, B, C, t, target, color, blockType) {
 	if (blockType === undefined) {
 		return makeOuterWallUndefined(transform, {x: Bp.x, y: Bp.y},{x: Ap.x, y: Ap.y},{x:Cp.x, y:Cp.y},color);
 	} else {
-/* connect the points by line
-1 Gp.x,Gp.y, 
-2 (Gx-sr3*t/2, Gp.y-t/2)
-3 (Hp.x-sr3*t/2), (Hp.y-t/2)
-4.Hp.x, Hp.y
-5.(Hp.x+sr3*t/2), (Hp.y-t/2)
-6.(Ipx+sr3*t/2), (Ip.y-t/2)
-7. Ip.x, Ip.y
-8. Ip.x , (Ip.y+t)
-9. Gp.x, (Gp.y+t)
-10. Gp.x, Gp.y
-*/
 		return makeOuterWall(transform,
 							{x: Gp.x, y: Gp.y},
 							{x: (Gp.x-sr3*t/2), y: (Gp.y-t/2)},
@@ -409,13 +385,9 @@ function transformPoint(p, midY, reverse, xOffset, yOffset) {
 	result.y = round(result.y+yOffset);
 	return result;
 }
-/*
-*/
 function toString(label, point) {
 	return label + "= (" + round(point.x) + ", " + round(point.y) + ")";
 }
-
-
 </script>
 </head>
 <body>
@@ -428,46 +400,47 @@ Number of cols: <input type="text" id="numCols" value="1"/><br /><br />
 Number of rows: <input type="text" id="numRows" value="1"/><br /><br />
 <input type="checkbox" name="reverse" id="reverse" value="Reverse">First one reversed</input><br> <br /><br />
 <input type="button" onclick="main()" value="Generate SVG" /><br />
+
+<div style="display: none;">
+    <textarea id="svgAllMale"></textarea>
+    <textarea id="svgBigMale"></textarea>
+    <textarea id="svgSmallMale"></textarea>
+    <textarea id="logdivMale"></textarea>
+    <textarea id="svgAllFemale"></textarea>
+    <textarea id="svgBigFemale"></textarea>
+    <textarea id="svgSmallFemale"></textarea>
+    <textarea id="logdivFemale"></textarea>
+    <div id="svgAllMaleDiv"></div>
+    <div id="svgBigMaleDiv"></div>
+    <div id="svgSmallMaleDiv"></div>
+    <div id="svgAllFemaleDiv"></div>
+    <div id="svgBigFemaleDiv"></div>
+    <div id="svgSmallFemaleDiv"></div>
+</div>
+
 <table>
 <tr>
 <td>SVG: (Copy the generated SVG and copy it to a file using notepad and save it to your machine)</td></tr>
 <tr><td>Male</td></tr>
 <tr>
-<td>All<textarea rows="15" cols="70" id="svgAllMale" value=""></textarea></td>
-<td>Big<textarea rows="15" cols="70" id="svgBigMale" value=""></textarea></td>
-<td>Normal<textarea rows="15" cols="70" id="svgNormalMale" value=""></textarea></td>
-<td>Small<textarea rows="15" cols="70" id="svgSmallMale" value=""></textarea></td>
-<td>Log<textarea rows="15" cols="70" id="logdivMale" value=""></textarea></td>
+<td>Normal<br><textarea rows="15" cols="70" id="svgNormalMale" value=""></textarea></td>
 </tr>
 <tr><td>Female</td></tr>
 <tr>
-<td>All<textarea rows="15" cols="70" id="svgAllFemale" value=""></textarea></td>
-<td>Big<textarea rows="15" cols="70" id="svgBigFemale" value=""></textarea></td>
-<td>Normal<textarea rows="15" cols="70" id="svgNormalFemale" value=""></textarea></td>
-<td>Small<textarea rows="15" cols="70" id="svgSmallFemale" value=""></textarea></td>
-<td>Log<textarea rows="15" cols="70" id="logdivFemale" value=""></textarea></td>
+<td>Normal<br><textarea rows="15" cols="70" id="svgNormalFemale" value=""></textarea></td>
 </tr>
 </table>
 </form><br />
+
 Male:
-All:
-<div id="svgAllMaleDiv">All</div>
-Big:
-<div id="svgBigMaleDiv">Big picture</div>
+<br />
 Normal:
 <div id="svgNormalMaleDiv">Normal</div>
-Small:
-<div id="svgSmallMaleDiv">Small</div>
 <br />
 <br />
 Female:
-All:
-<div id="svgAllFemaleDiv">All</div>
-Big:
-<div id="svgBigFemaleDiv">Big picture</div>
+<br />
 Normal:
 <div id="svgNormalFemaleDiv">Normal</div>
-Small:
-<div id="svgSmallFemaleDiv">Small</div>
 </body>
 </html>
