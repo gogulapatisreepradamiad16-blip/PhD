@@ -1,0 +1,446 @@
+<html>
+<head>
+<title>Jally Generator for a given void percentage</title>
+<script>
+var PI = Math.PI;
+var sr3 = Math.sqrt(3);
+var CM2PX = 37.79527559055118;
+var C1 = (sr3/(4*sr3-2*PI));
+function main() {
+	var transform = {};
+	transform.firstTime = true;
+	transform.initialized = false;
+	main2(transform);
+	console.log(transform);
+	transform.initialized = true;
+	main2(transform);
+}
+function getXYRange(transform, p1, p2, p3) {
+	getXYRange(transform, p1);
+	getXYRange(transform, p2);
+	getXYRange(transform, p3);
+}
+function getXYRange(transform, p1, p2, p3, p4) {
+	getXYRange(transform, p1);
+	getXYRange(transform, p2);
+	getXYRange(transform, p3);
+	getXYRange(transform, p4);
+}
+function getXYRange(transform, p1, p2, p3, p4, p5, p6, p7, p8, p9) {
+	getXYRange(transform, p1);
+	getXYRange(transform, p2);
+	getXYRange(transform, p3);
+	getXYRange(transform, p4);
+	getXYRange(transform, p5);
+	getXYRange(transform, p6);
+	getXYRange(transform, p7);
+	getXYRange(transform, p8);
+	getXYRange(transform, p9);
+}
+function getXYRange(transform, p) {
+   if (transform.xMin === undefined || transform.xMin>p.x) transform.xMin = p.x;
+   if (transform.yMin === undefined || transform.yMin>p.y) transform.yMin = p.y;
+   if (transform.xMax === undefined || transform.xMax<p.x) transform.xMax = p.x;
+   if (transform.yMax === undefined || transform.yMax<p.y) transform.yMax = p.y;
+}
+function main2(transform) {
+	var sCm = document.getElementById("s").value/2;
+	var s = sCm*CM2PX;
+	var tCm = document.getElementById("t").value*1;
+	var th = tCm*CM2PX;
+	var gapCm = document.getElementById("gap").value*1;
+	var gapPx= gapCm*CM2PX;
+	if (tCm>gapCm) {
+		alert("you cannot have thickness greater than the gap between outer and inner triangles");
+	}
+	
+	var vpmax =(1-(sr3*gapPx/s/2))/C1;
+	vpmax = vpmax*vpmax;
+
+	var vpmaxDiv = document.getElementById("vpmax");
+
+	var vp = document.getElementById("vpvalue").value/100;
+
+	var b = s * Math.sqrt(vp*C1);
+	var R = (s+s)/sr3;
+	var r = (b+b)/sr3;
+	var OL = b/sr3;
+	var h= s*sr3;
+	var t = (s-b)/sr3;
+	
+	var Ap = {x: 0, y: round(h)};
+	var Bp = {x: s, y: 0};
+	var Cp = {x: (s+s), y: round(h)};
+	var Gp = {x: round(s-b), y: round(h-t)};
+	var Hp = {x: s, y: round(R-r)};
+	var Ip = {x: round(s+b), y: round(h-t)};
+
+	var out = "vp is " + vp + "\n" +
+                str("s", s) + "\n" +
+                str("b", b) + "\n" + 
+                str("R", R) + "\n" +
+                str("r", r) + "\n" +
+                str("OL", OL) + "\n" +
+                str("h", h) + "\n" +
+                str("t", t) + "\n" +
+                str("thickness", th) + "\n" +
+                str("gap in cm", gapCm) + "\n" +
+                str("gap in px", gapPx) + "\n" +
+                str("sCm", sCm) + "\n" +
+		str("tCm", tCm) + "\n";
+
+	vpmaxDiv.value= "VP Maximum is " + (vpmax*100).toFixed(2) + "%";
+	var log = document.getElementById("logdivMale");
+	log.innerHTML = out;
+	log = document.getElementById("logdivFemale");
+	log.innerHTML = out;
+	var noCols = document.getElementById("numCols").value;
+	var noRows = document.getElementById("numRows").value;
+	var reverse = document.getElementById("reverse").checked;
+	
+	transform.noCols = noCols;
+	transform.noRows = noRows;
+	transform.reverse = reverse;
+	transform.calc = {Ap: {x: Ap.x, y: Ap.y+t*3},
+	                  Bp: {x: Bp.x+sr3*t, y: Bp.y},
+					  Cp: {x: Cp.x+sr3*t*2, y: Cp.y+t*3},
+					  Gp: Gp,
+					  Hp: Hp,
+					  Ip: Ip
+					 };
+	if (transform.firstTime) {
+		transform.xOffset = (transform.calc.Cp.x-transform.calc.Ap.x);
+		transform.yOffset =  transform.calc.Ap.y  - transform.calc.Bp.y;
+		transform.x = (transform.calc.Cp.x + transform.calc.Ap.x)/2;
+		transform.y = (transform.calc.Ap.y + transform.calc.Bp.y)/2;
+	}
+
+	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "All", "", "Male");
+	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Big", "black", "Male");
+	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Small", "black", "Male");
+	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Normal", "black", "Male");
+
+	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "All", "", "Female");
+	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Big", "black", "Female");
+	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Small", "black", "Female");
+	makeSVG(transform, Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Normal", "black", "Female");
+	
+	return false;
+}
+function round(val) {
+	try {
+		return Number(Number(val).toFixed(2));
+	} catch(err) {
+		console.log(err.message);
+		console.log(val);
+	}
+	return val;
+}
+function str(name, value) {
+	
+	var result = name + " = " + value;
+        try {
+	result =  (name + " = " + value.toFixed(2));
+	} catch(err) {
+		console.log(err.message);
+		console.log(value);
+	}
+	return result;
+}
+
+function makeHeader(transform, s, h, t) {
+	var xshift = sr3*t;
+	var yshift = t+t;
+	var blockWidth = (transform.xMax-transform.xMin);
+	var blockHeight = (transform.yMax-transform.yMin);
+	if (!transform.initialized) {
+		blockWidth = transform.xOffset;
+		blockHeight = transform.yOffset;
+	} else {
+		if (blockWidth<transform.xOffset) blockWidth = transform.xOffset;
+		if (blockHeight<transform.yOffset) blockHeight = transform.yOffset;
+	}
+	var height = round(h+yshift+t+(transform.noRows-1)*blockHeight);
+	var width =  round(2*s+2*xshift+(transform.noCols-1)*blockWidth);
+	
+	height = round(transform.noRows*(h+yshift+t));
+	width = round(transform.noCols*(2*s+2*xshift));
+
+	return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" + 
+		   "<svg height=\""+ height + "\" width=\"" + width + "\">\n";
+}
+function makeSVG(transform, A, B, C, G, H, I, s, h, b, t, target, color, blockType) {
+	var xshift = sr3*t;
+	var yshift = t+t;
+	var Ap = {x: A.x+xshift , y: A.y+yshift};
+	var Bp = {x: B.x+xshift, y: B.y+yshift};
+	var Cp = {x: C.x+xshift, y:C.y+yshift};
+	var Gp = {x: G.x+xshift, y: G.y+yshift};
+	var Hp = {x: H.x+xshift, y: H.y+yshift};
+	var Ip = {x: I.x+xshift, y: I.y+yshift};
+
+	if (target==="Big") {
+		Ap.x = Ap.x-xshift;
+		Ap.y = Ap.y + t;
+        Cp.x = Cp.x+xshift;
+        Cp.y = Cp.y + t;
+		Bp.y = Bp.y-t-t;
+	} else if (target === "Small") {
+		Ap.x = Ap.x+xshift;
+		Ap.y = Ap.y - t;
+                Cp.x = Cp.x-xshift;
+                Cp.y = Cp.y - t;
+		Bp.y = Bp.y+t+t;
+	}
+	var r = round(b+b);
+    var svg =  "";
+    if (target === "All") {
+		svg = makeHeader(transform, s, h, t) +
+              makeOuter(transform, A, B, C, t, "Big", "grey", blockType) +
+              makeOuter(transform, A, B, C, t, "Normal", "black") +
+              makeOuter(transform, A, B, C, t, "Small", "grey") +
+			  makeInner(transform, G, H, I, b, t);
+    } else {
+		var log = document.getElementById("logdiv".concat(blockType));
+		log.innerHTML = log.innerHTML + "\nTarget: " + target + "\n" +
+			toString("A", Ap) + "\n" + 
+			toString("B", Bp) + "\n" +
+			toString("C", Cp) + "\n"+
+			toString("G", Gp) + "\n"+
+			toString("H", Hp) + "\n"+
+			toString("I", Ip);
+
+		svg = makeHeader(transform, s, h, t) + makeOuter(transform, A, B, C, t, target, color) + makeInner(transform, G, H, I, b, t);
+	}
+	var targetDiv = "svg".concat(target).concat(blockType).concat("Div");
+	var outputTxt = "svg".concat(target).concat(blockType);
+	var svgdiv = document.getElementById(targetDiv);
+	svgdiv.innerHTML = svg;
+	var output = document.getElementById(outputTxt);
+	output.innerHTML = svg;
+	return svg;
+}
+function makeInner(transform, G, H, I, b, t) {
+
+	var xshift = sr3*t;
+	var yshift = t+t;
+	var Gp = {x: G.x+xshift, y: G.y+yshift};
+	var Hp = {x: H.x+xshift, y: H.y+yshift};
+	var Ip = {x: I.x+xshift, y: I.y+yshift};
+
+	var r = round(b+b);
+    return makeInnerWall(transform, r, Gp, Ip, Hp);
+}
+function makeInnerWall(transform, r, Gp, Ip, Hp) {
+	if (!transform.initialized) getXYRange(transform, Gp, Ip, Hp);
+	var rowReverse = transform.reverse;
+	var paths = "";
+	for (var i=0; i<transform.noRows; i++) {
+		var reverse = rowReverse;
+		for (var j=0; j<transform.noCols; j++) {
+			var G = transformPoint(Gp, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var H = transformPoint(Hp, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var I = transformPoint(Ip, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			paths += makeInnerWallInstance(r, G, I, H, reverse);
+			if (reverse) reverse = false;
+			else reverse = true;
+		}
+		if (rowReverse) rowReverse = false;
+		else rowReverse = true;		
+	}
+	return paths + 	"Sorry, your browser does not support inline SVG.\n</svg>";
+}
+function makeInnerWallInstance(r, Gp, Ip, Hp, reverse) {
+	if (!reverse) {
+		return "<path d=\"M" + Gp.x + " " + Gp.y + "\n" + 
+		 " a" + r  + "," + r + " 0 0,1 " + (Ip.x-Gp.x) + "," + (Ip.y-Gp.y) + "\n" + 
+		 " a" + r  + "," + r + " 0 0,1 " + (Hp.x-Ip.x) + "," + (Hp.y-Ip.y) + "\n" + 
+		 " a" + r  + "," + r + " 0 0,1 " + (Gp.x-Hp.x) + "," + (Gp.y-Hp.y) + "\"\n" + 
+		 " fill=\"white\" stroke=\"white\" stroke-width=\"1\" />\n";
+	 } else {
+		return "<path d=\"M" + Gp.x + " " + Gp.y + "\n" + 
+		 " a" + r  + "," + r + " 0 0,0 " + (Ip.x-Gp.x) + "," + (Ip.y-Gp.y) + "\n" + 
+		 " a" + r  + "," + r + " 0 0,0 " + (Hp.x-Ip.x) + "," + (Hp.y-Ip.y) + "\n" + 
+		 " a" + r  + "," + r + " 0 0,0 " + (Gp.x-Hp.x) + "," + (Gp.y-Hp.y) + "\"\n" + 
+		 " fill=\"white\" stroke=\"white\" stroke-width=\"1\" />\n";
+	 }
+}
+function makeOuter(transform, A, B, C, t, target, color, blockType) {
+
+	var xshift = sr3*t;
+	var yshift = t+t;
+	var Gp = {x: A.x+xshift , y: A.y+yshift};
+	var Hp = {x: B.x+xshift, y: B.y+yshift};
+	var Ip = {x: C.x+xshift, y:C.y+yshift};
+
+	var Ap ={x: A.x+xshift , y: A.y+yshift};
+	var Bp = {x: B.x+xshift, y: B.y+yshift};
+	var Cp = {x: C.x+xshift, y:C.y+yshift};
+	if (target==="Big") {
+		Ap.x = Gp.x-xshift;
+		Ap.y = Gp.y + t;
+        Cp.x = Ip.x+xshift;
+        Cp.y = Ip.y + t;
+		Bp.x = Hp.x;
+		Bp.y = Hp.y-t-t;
+	} else if (target === "Small") {
+		Ap.x = Gp.x+xshift;
+		Ap.y = Gp.y - t;
+                Cp.x = Ip.x-xshift;
+                Cp.y = Ip.y - t;
+		Bp.x = Hp.x;
+		Bp.y = Hp.y+t+t;
+	}
+	if (blockType === undefined) {
+		return makeOuterWallUndefined(transform, {x: Bp.x, y: Bp.y},{x: Ap.x, y: Ap.y},{x:Cp.x, y:Cp.y},color);
+	} else {
+		return makeOuterWall(transform,
+							{x: Gp.x, y: Gp.y},
+							{x: (Gp.x-sr3*t/2), y: (Gp.y-t/2)},
+                            {x: (Hp.x-sr3*t/2), y: (Hp.y-t/2)},
+                            {x: Hp.x, y: Hp.y},
+                            {x: (Hp.x+sr3*t/2), y: (Hp.y-t/2)},
+                            {x: (Ip.x+sr3*t/2), y: (Ip.y-t/2)},
+                            {x: Ip.x, y: Ip.y},
+                            {x: Ip.x, y: (Ip.y+t)},
+                            {x: Gp.x,y: (Gp.y+t)},
+                            color); 
+	}
+}
+function makeOuterWallUndefined(transform, p1, p2, p3, color) {
+	if (!transform.initialized) getXYRange(transform, p1, p2, p3);
+	if (transform.firstTime) {
+		transform.xOffset = p3.x - p2.x;
+		transform.yOffset = p2.y - p1.y;
+		transform.y = (p2.y+p1.y)/2;
+		transform.x = (p2.x + p3.x)/2;
+		transform.firstTime = false;
+	}
+	var rowReverse = transform.reverse;
+	var paths = "";
+	for (var i=0; i<transform.noRows; i++) {
+		var reverse = rowReverse;
+		for (var j=0; j<transform.noCols; j++) {
+			var P1 = transformPoint(p1, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P2 = transformPoint(p2, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P3 = transformPoint(p3, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			paths += makeOuterWallInstanceUndefined(P1, P2, P3, color);
+			if (reverse) reverse = false;
+			else reverse = true;
+		}
+		if (rowReverse) rowReverse = false;
+		else rowReverse = true;		
+	}
+	return paths;
+}
+function makeOuterWallInstanceUndefined(p1, p2, p3, color) {
+	return "<path d=\"M" + p1.x + " " + p1.y +" L" + p2.x + " " + p2.y + " L" + p3.x + " " + p3.y + "Z\" fill=\"" + color + "\" />\n";
+}
+function makeOuterWall(transform, p1, p2, p3, p4, p5, p6, p7, p8, p9, color) {
+	if (!transform.initialized) getXYRange(transform, p1, p2, p3, p4, p5, p6, p7, p8, p9);
+	var rowReverse = transform.reverse;
+	var paths = "";
+	for (var i=0; i<transform.noRows; i++) {
+		var reverse = rowReverse;
+		for (var j=0; j<transform.noCols; j++) {
+			var P1 = transformPoint(p1, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P2 = transformPoint(p2, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P3 = transformPoint(p3, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P4 = transformPoint(p4, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P5 = transformPoint(p5, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P6 = transformPoint(p6, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P7 = transformPoint(p7, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P8 = transformPoint(p8, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			var P9 = transformPoint(p9, transform.y, reverse, j*transform.xOffset/2, i*transform.yOffset);
+			paths += makeOuterWallInstance(P1, P2, P3, P4, P5, P6, P7, P8, P9, color);
+			if (reverse) reverse = false;
+			else reverse = true;
+		}
+		if (rowReverse) rowReverse = false;
+		else rowReverse = true;		
+	}
+	return paths;
+}
+function makeOuterWallInstance(p1, p2, p3, p4, p5, p6, p7, p8, p9, color) {
+	return "<path d=\"M" + p1.x + " " + p1.y 
+                              +" L" + p2.x + " " + p2.y
+                              + " L" + p3.x + " " + p3.y
+                              + " L" + p4.x + " " + p4.y
+                              + " L" + p5.x + " " + p5.y
+                              + " L" + p6.x + " " + p6.y
+                              + " L" + p7.x + " " + p7.y
+                              + " L" + p8.x + " " + p8.y
+                              + " L" + p9.x + " " + p9.y
+                              + "Z\" fill=\"" + color + "\" />\n"
+}
+function transformPoint(p, midY, reverse, xOffset, yOffset) {
+	var result = {x: round(p.x+xOffset), y: p.y};
+	if (reverse) {
+		if (result.y > midY) {
+			result.y = (midY - (result.y-midY));
+		} else {
+			result.y = (midY + (midY-result.y));
+		}
+	}
+	result.y = round(result.y+yOffset);
+	return result;
+}
+function toString(label, point) {
+	return label + "= (" + round(point.x) + ", " + round(point.y) + ")";
+}
+</script>
+</head>
+<body>
+<form>
+Please enter the side a the triangle <input id="s" type="text" value="30" />cm<br /><br />
+Desired void percentage <input type="text" id="vpvalue" value="10"/> (0-37.24%)<input id="vpmax" readonly /><br /><br />
+Gap between outer and inner triangles: <input type="text" id="gap" value="5"/>cm <br /><br />
+Thickness of connector (depth or projection): <input type="text" id="t" value="2"/>cm <br /><br />
+Number of cols: <input type="text" id="numCols" value="1"/><br /><br />
+Number of rows: <input type="text" id="numRows" value="1"/><br /><br />
+<input type="checkbox" name="reverse" id="reverse" value="Reverse">First one reversed</input><br> <br /><br />
+<input type="button" onclick="main()" value="Generate SVG" /><br />
+
+<div style="display: none;">
+    <textarea id="svgAllMale"></textarea>
+    <textarea id="svgBigMale"></textarea>
+    <textarea id="svgSmallMale"></textarea>
+    <textarea id="logdivMale"></textarea>
+    <textarea id="svgAllFemale"></textarea>
+    <textarea id="svgBigFemale"></textarea>
+    <textarea id="svgSmallFemale"></textarea>
+    <textarea id="logdivFemale"></textarea>
+    <div id="svgAllMaleDiv"></div>
+    <div id="svgBigMaleDiv"></div>
+    <div id="svgSmallMaleDiv"></div>
+    <div id="svgAllFemaleDiv"></div>
+    <div id="svgBigFemaleDiv"></div>
+    <div id="svgSmallFemaleDiv"></div>
+</div>
+
+<table>
+<tr>
+<td>SVG: (Copy the generated SVG and copy it to a file using notepad and save it to your machine)</td></tr>
+<tr><td>Male</td></tr>
+<tr>
+<td>Normal<br><textarea rows="15" cols="70" id="svgNormalMale" value=""></textarea></td>
+</tr>
+<tr><td>Female</td></tr>
+<tr>
+<td>Normal<br><textarea rows="15" cols="70" id="svgNormalFemale" value=""></textarea></td>
+</tr>
+</table>
+</form><br />
+
+Male:
+<br />
+Normal:
+<div id="svgNormalMaleDiv">Normal</div>
+<br />
+<br />
+Female:
+<br />
+Normal:
+<div id="svgNormalFemaleDiv">Normal</div>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<html>
+<head>
+<title>Jally Generator for a given void percentage</title>
+<script>
+var PI = Math.PI;
+var sr3 = Math.sqrt(3);
+var CM2PX = 37.79527559055118;
+var C1 = (sr3/(4*sr3-2*PI));
+
+function main() {
+	var sCm = document.getElementById("s").value/2;
+	var s = sCm*CM2PX;
+	var tCm = document.getElementById("t").value*1;
+	var th = tCm*CM2PX;
+	var gapCm = document.getElementById("gap").value*1;
+	var gapPx= gapCm*CM2PX;
+	if (tCm>gapCm) {
+		alert("you cannot have thickness greater than the gap between outer and inner triangles");
+	}
+	
+	var vpmax =(1-(sr3*gapPx/s/2))/C1;
+	vpmax = vpmax*vpmax;
+
+	var vpmaxDiv = document.getElementById("vpmax");
+
+	var vp = document.getElementById("vpvalue").value/100;
+
+	var b = s * Math.sqrt(vp*C1);
+	var R = (s+s)/sr3;
+	var r = (b+b)/sr3;
+	var OL = b/sr3;
+	var h= s*sr3;
+	var t = (s-b)/sr3;
+	
+	var Ap = {x: 0, y: round(h)};
+	var Bp = {x: s, y: 0};
+	var Cp = {x: (s+s), y: round(h)};
+	var Gp = {x: round(s-b), y: round(h-t)};
+	var Hp = {x: s, y: round(R-r)};
+	var Ip = {x: round(s+b), y: round(h-t)};
+
+	var out = "vp is " + vp + "\n" +
+                str("s", s) + "\n" +
+                str("b", b) + "\n" + 
+                str("R", R) + "\n" +
+                str("r", r) + "\n" +
+                str("OL", OL) + "\n" +
+                str("h", h) + "\n" +
+                str("t", t) + "\n" +
+                str("thickness", th) + "\n" +
+                str("gap in cm", gapCm) + "\n" +
+                str("gap in px", gapPx) + "\n" +
+                str("sCm", sCm) + "\n" +
+		str("tCm", tCm) + "\n";
+
+	vpmaxDiv.value= "VP Maximum is " + (vpmax*100).toFixed(2) + "%";
+	var log = document.getElementById("logdivMale");
+	log.innerHTML = out;
+	log = document.getElementById("logdivFemale");
+	log.innerHTML = out;
+	makeSVG(Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "All", "", "Male");
+	makeSVG(Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Big", "black", "Male");
+	makeSVG(Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Small", "black", "Male");
+	makeSVG(Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Normal", "black", "Male");
+
+	makeSVG(Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "All", "", "Female");
+	makeSVG(Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Big", "black", "Female");
+	makeSVG(Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Small", "black", "Female");
+	makeSVG(Ap, Bp, Cp, Gp, Hp, Ip, s, h, b, th, "Normal", "black", "Female");
+	return false;
+}
+function round(val) {
+	return val;
+}
+function str(name, value) {
+	
+	var result = name + " = " + value;
+        try {
+	result =  (name + " = " + value.toFixed(2));
+	} catch(err) {
+	console.log(err.message);
+	console.log(value);
+	}
+	return result;
+}
+
+function makeHeader(s, h, t) {
+
+	var xshift = sr3*t;
+	var yshift = t+t;
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" + 
+               "<svg height=\""+ round(h+yshift+t) + "\" width=\"" + round(2*s+2*xshift) + "\">\n";
+}
+function makeSVG(A, B, C, G, H, I, s, h, b, t, target, color, blockType) {
+
+	var xshift = sr3*t;
+	var yshift = t+t;
+	var Ap = {x: A.x+xshift , y: A.y+yshift};
+	var Bp = {x: B.x+xshift, y: B.y+yshift};
+	var Cp = {x: C.x+xshift, y:C.y+yshift};
+	var Gp = {x: G.x+xshift, y: G.y+yshift};
+	var Hp = {x: H.x+xshift, y: H.y+yshift};
+	var Ip = {x: I.x+xshift, y: I.y+yshift};
+
+	if (target==="Big") {
+		Ap.x = Ap.x-xshift;
+		Ap.y = Ap.y + t;
+                Cp.x = Cp.x+xshift;
+                Cp.y = Cp.y + t;
+		Bp.y = Bp.y-t-t;
+	} else if (target === "Small") {
+		Ap.x = Ap.x+xshift;
+		Ap.y = Ap.y - t;
+                Cp.x = Cp.x-xshift;
+                Cp.y = Cp.y - t;
+		Bp.y = Bp.y+t+t;
+	}
+	var r = round(b+b);
+        var svg =  "";
+        if (target === "All") {
+		svg = makeHeader(s, h, t) +
+                      makeOuter(A, B, C, t, "Big", "grey", blockType) +
+                      makeOuter(A, B, C, t, "Normal", "black") +
+                      makeOuter(A, B, C, t, "Small", "grey") +
+		      makeInner(G, H, I, b, t);
+        }
+	else {
+		var log = document.getElementById("logdiv".concat(blockType));
+		log.innerHTML = log.innerHTML + "\nTarget: " + target + "\n" +
+			toString("A", Ap) + "\n" + 
+			toString("B", Bp) + "\n" +
+			toString("C", Cp) + "\n"+
+			toString("G", Gp) + "\n"+
+			toString("H", Hp) + "\n"+
+			toString("I", Ip);
+
+		svg = makeHeader(s, h, t) + makeOuter(A, B, C, t, target, color, blockType) + makeInner(G, H, I, b, t);
+	}
+	var targetDiv = "svg".concat(target).concat(blockType).concat("Div");
+	var outputTxt = "svg".concat(target).concat(blockType);
+	var svgdiv = document.getElementById(targetDiv);
+	console.log(targetDiv);
+	console.log(outputTxt);
+	svgdiv.innerHTML = svg;
+	var output = document.getElementById(outputTxt);
+	output.innerHTML = svg;
+	console.log(targetDiv);
+	console.log(outputTxt);
+	return svg;
+}
+function makeInner(G, H, I, b, t) {
+
+	var xshift = sr3*t;
+	var yshift = t+t;
+	var Gp = {x: G.x+xshift, y: G.y+yshift};
+	var Hp = {x: H.x+xshift, y: H.y+yshift};
+	var Ip = {x: I.x+xshift, y: I.y+yshift};
+
+
+	var r = round(b+b);
+        var svg = 
+"  <path d=\"M" + Gp.x + " " + Gp.y + "\n" + 
+     " a" + r  + "," + r + " 0 0,1 " + (Ip.x-Gp.x) + "," + (Ip.y-Gp.y) + "\n" + 
+     " a" + r  + "," + r + " 0 0,1 " + (Hp.x-Ip.x) + "," + (Hp.y-Ip.y) + "\n" + 
+     " a" + r  + "," + r + " 0 0,1 " + (Gp.x-Hp.x) + "," + (Gp.y-Hp.y) + "\"\n" + 
+     " fill=\"white\" stroke=\"white\" stroke-width=\"1\" />\n" + 
+"  Sorry, your browser does not support inline SVG.\n" + 
+"</svg>";
+	return svg;
+}
+
+function makeOuter(A, B, C, t, target, color, blockType) {
+
+	var xshift = sr3*t;
+	var yshift = t+t;
+	var Gp = {x: A.x+xshift , y: A.y+yshift};
+	var Hp = {x: B.x+xshift, y: B.y+yshift};
+	var Ip = {x: C.x+xshift, y:C.y+yshift};
+
+	var Ap ={x: A.x+xshift , y: A.y+yshift};
+	var Bp = {x: B.x+xshift, y: B.y+yshift};
+	var Cp = {x: C.x+xshift, y:C.y+yshift};
+	
+	
+	if (target==="Big") {
+		Ap.x = Gp.x-xshift;
+		Ap.y = Gp.y + t;
+		Cp.x = Ip.x+xshift;
+		Cp.y = Ip.y + t;
+		Bp.x = Hp.x;
+		Bp.y = Hp.y-t-t;
+	} else if (target === "Small") {
+		Ap.x = Gp.x+xshift;
+		Ap.y = Gp.y - t;
+		Cp.x = Ip.x-xshift;
+		Cp.y = Ip.y - t;
+		Bp.x = Hp.x;
+		Bp.y = Hp.y+t+t;
+	}
+	if (blockType === undefined || target == "Normal" || target === "Small") {
+	        return "<path d=\"M" + Bp.x + " " + Bp.y +" L" + Ap.x + " " + Ap.y + " L" + Cp.x + " " + Cp.y + "Z\" fill=\"" + color + "\" />\n";
+	} else {
+		if (blockType === "Male") {
+		
+			Ap ={x: A.x+xshift , y: A.y+yshift};
+			Bp = {x: B.x+xshift, y: B.y+yshift};
+			Cp = {x: C.x+xshift, y:C.y+yshift};
+
+			Ap.x = Gp.x+xshift;
+			Ap.y = Gp.y - t;
+			Cp.x = Ip.x-xshift;
+			Cp.y = Ip.y - t;
+			Bp.x = Hp.x;
+			Bp.y = Hp.y+t+t;
+			
+			var A2 = {};
+			var A4 = {};
+			var A5 = {};
+			var A7 = {};
+			var A9 = {};
+			var A10 = {};
+			A2.x = Ap.x-t*sr3;
+			A2.y = Ap.y-t;
+			A4.x = Bp.x-t*sr3;
+			A4.y = Bp.y-t;
+			A5.x = Bp.x+t*sr3;
+			A5.y = Bp.y-t;
+			A7.x = Cp.x + t*sr3;
+			A7.y = Cp.y - t;
+			A9.x = Cp.x;
+			A9.y = Cp.y + t +t;
+			A10.x = Ap.x;
+			A10.y = Ap.y + t + t;
+			//return "<path d=\"M" + Bp.x + " " + Bp.y +" L" + Ap.x + " " + Ap.y + " L" + Cp.x + " " + Cp.y + "Z\" fill=\""  + color + "\" />\n";
+				/* connect the points by line
+				1 Gp.x,Gp.y
+				2 (Gx-sr3*t/2, Gp.y-t/2)
+				3 (Hp.x-sr3*t/2), (Hp.y-t/2)
+				4.Hp.x, Hp.y
+				5.(Hp.x+sr3*t/2), (Hp.y-t/2)
+				6.(Ipx+sr3*t/2), (Ip.y-t/2)
+				7. Ip.x, Ip.y
+				8. Ip.x , (Ip.y+t)
+				9. Gp.x, (Gp.y+t)
+				10. Gp.x, Gp.y
+				*/
+/*
+A10 – AI – A2 – A4 – BI – A5 – A7 – CI – A9 – A10
+A2.x = AI.x-t√3
+A2.y = AI.y-t
+A4.x = BI.x- t√3
+A4.y = BI.y-t
+A5.x = BI.x+ t√3
+A5.y = BI.y-t
+A6.x = AI.x+t√3
+A6.y = AI.y-t
+A9.x = CI.x
+A9.y = CI.y + 2t
+A10.x = AI.x
+A10.y = AI.y + 2 t
+A10 – AI – A2 – A4 – BI – A5 – A7 – CI – A9 – A10
+*/
+
+				return "<path d=\"M" + A10.x + " " + A10.y 
+									  +" L" + Ap.x + " " + Ap.y
+									  + " L" + A2.x + " " + A2.y
+									  + " L" + A4.x + " " + A4.y
+									  + " L" + Bp.x + " " + Bp.y
+									  + " L" + A5.x + " " + A5.y
+									  + " L" + A7.x + " " + A7.y
+									  + " L" + Cp.x + " " + Cp.y
+									  + " L" + A9.x + " " + A9.y
+									  + "Z\" fill=\"" + color + "\" />\n";
+/*
+				return "<path d=\"M" + Gp.x + " " + Gp.y 
+									  +" L" + (Gp.x-sr3*t/2) + " " + (Gp.y-t/2)
+									  + " L" + (Hp.x-sr3*t/2) + " " + (Hp.y-t/2)
+									  + " L" + Hp.x + " " + Hp.y
+									  + " L" + (Hp.x+sr3*t/2) + " " + (Hp.y-t/2)
+									  + " L" + (Ip.x+sr3*t/2) + " " + (Ip.y-t/2)
+									  + " L" + Ip.x + " " + Ip.y
+									  + " L" + Ip.x + " " + (Ip.y+t)
+									  + " L" + Gp.x + " " + (Gp.y+t)
+									  + "Z\" fill=\"" + color + "\" />\n";
+*/
+		} else if (blockType === "Female") {
+				/* connect the points by line
+				1  (Bp.x-(Hp.y-Bp.y-t)/sr3), (Hp.y-t)
+				2. (Bp.x+(Hp.y-Bp.y-t)/sr3), (Hp.y-t)
+				3. (Cp.x-(Hp.y-Bp.y-t)/sr3), (Cp.y-(Hp.y-Bp.y-t))
+				4. (Cp.x-(Hp.y-Bp.y-t)*2/sr3), Cp.y
+				5. (Ap.x+(Hp.y-Bp.y-t)*2/sr3), Ap.y
+				6. (Ap.x+(Hp.y-Bp.y-t)/sr3), (Ap.y-(Hp.y-Bp.y-t))
+				*/
+				return "<path d=\"M" + Bp.x + " " + Bp.y +" L" + Ap.x + " " + Ap.y + " L" + Cp.x + " " + Cp.y + "Z\" fill=\"" + color + "\" />\n";
+/*
+				return "<path d=\"M" + (Bp.x-(Hp.y-Bp.y-t)/sr3) + " " + (Hp.y-t)
+									  +" L" + (Bp.x+(Hp.y-Bp.y-t)/sr3) + " " + (Hp.y-t)
+									  + " L" + (Cp.x-(Hp.y-Bp.y-t)/sr3) + " " + (Cp.y-(Hp.y-Bp.y-t))
+									  + " L" + (Cp.x-(Hp.y-Bp.y-t)*2/sr3) + " " + Cp.y
+									  + " L" + (Ap.x+(Hp.y-Bp.y-t)*2/sr3) + " " + Ap.y
+									  + " L" + (Ap.x+(Hp.y-Bp.y-t)/sr3) + " " + (Ap.y-(Hp.y-Bp.y-t))
+									  + "Z\" fill=\"" + color + "\" />\n";
+*/
+		}
+	}
+}
+function toString(label, point) {
+	return label + "= (" + point.x.toFixed(2) + ", " + point.y.toFixed(2) + ")";
+}
+</script>
+</head>
+<body>
+<form>
+Please enter the side a the triangle <input id="s" type="text" value="30" />cm<br /><br />
+Desired void percentage <input type="text" id="vpvalue" value="10"/> (0-37.24%)<input id="vpmax" readonly /><br /><br />
+Gap between outer and inner triangles: <input type="text" id="gap" value="5"/>cm <br /><br />
+Thickness of connector (depth or projection): <input type="text" id="t" value="2"/>cm <br /><br />
+<input type="button" onclick="main()" value="Generate SVG" /><br />
+<table>
+<tr>
+<td>SVG: (Copy the generated SVG and copy it to a file using notepad and save it to your machine)</td></tr>
+<tr><td>Male</td></tr>
+<tr>
+<td>All<textarea rows="15" cols="70" id="svgAllMale" value=""></textarea></td>
+<td>Big<textarea rows="15" cols="70" id="svgBigMale" value=""></textarea></td>
+<td>Normal<textarea rows="15" cols="70" id="svgNormalMale" value=""></textarea></td>
+<td>Small<textarea rows="15" cols="70" id="svgSmallMale" value=""></textarea></td>
+<td>Log<textarea rows="15" cols="70" id="logdivMale" value=""></textarea></td>
+</tr>
+<tr><td>Female</td></tr>
+<tr>
+<td>All<textarea rows="15" cols="70" id="svgAllFemale" value=""></textarea></td>
+<td>Big<textarea rows="15" cols="70" id="svgBigFemale" value=""></textarea></td>
+<td>Normal<textarea rows="15" cols="70" id="svgNormalFemale" value=""></textarea></td>
+<td>Small<textarea rows="15" cols="70" id="svgSmallFemale" value=""></textarea></td>
+<td>Log<textarea rows="15" cols="70" id="logdivFemale" value=""></textarea></td>
+</tr>
+
+</table>
+</form><br />
+Male:
+All:
+<div id="svgAllMaleDiv">All</div>
+Big:
+<div id="svgBigMaleDiv">Big picture</div>
+Normal:
+<div id="svgNormalMaleDiv">Normal</div>
+Small:
+<div id="svgSmallMaleDiv">Small</div>
+<br />
+<br />
+Female:
+All:
+<div id="svgAllFemaleDiv">All</div>
+Big:
+<div id="svgBigFemaleDiv">Big picture</div>
+Normal:
+<div id="svgNormalFemaleDiv">Normal</div>
+Small:
+<div id="svgSmallFemaleDiv">Small</div>
+</body>
+</html>
