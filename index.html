@@ -7,153 +7,257 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FBF9F6;
-            color: #333333;
+            background-color: #FAF8F5;
+            color: #2D2A26;
         }
         .serif-title {
             font-family: 'Playfair Display', serif;
         }
+        .mono-text {
+            font-family: 'JetBrains Mono', monospace;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="min-h-screen flex flex-col justify-between antialiased">
 
-    <header class="border-b border-stone-200 bg-white py-12 px-6 sm:px-12 text-center shadow-sm">
-        <div class="max-w-5xl mx-auto">
-            <span class="text-xs font-semibold tracking-widest text-amber-800 uppercase bg-amber-50 px-3 py-1 rounded-full">Doctoral Research Digital Compendium</span>
-            <h1 class="serif-title text-3xl sm:text-4xl mt-4 font-bold text-stone-800 leading-tight">
+    <!-- Header Section -->
+    <header class="border-b border-stone-200 bg-white py-16 px-6 sm:px-12 text-center shadow-sm relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30 pointer-events-none"></div>
+        <div class="max-w-5xl mx-auto relative z-10">
+            <span class="text-xs font-bold tracking-widest text-amber-800 uppercase bg-amber-50 border border-amber-200/60 px-4 py-1.5 rounded-full inline-block">
+                Doctoral Research Digital Compendium
+            </span>
+            <h1 class="serif-title text-3xl sm:text-5xl mt-6 font-bold text-stone-900 leading-tight tracking-tight">
                 Modular Triangular Screen System with Complementary Interlocking Components and Adjustable Light Modulation
             </h1>
-            <p class="mt-2 text-stone-600 max-w-2xl mx-auto font-medium">
-                Comprehensive Index of Software Tools, Calculators, Theoretical Treatises, and Intellectual Property Disclosures
+            <p class="mt-4 text-stone-600 max-w-3xl mx-auto text-base sm:text-lg font-normal leading-relaxed">
+                Comprehensive Index of Computational Verification Engines, Parametric Layout Simulation Frameworks, and Intellectual Property Disclosures
             </p>
-            <div class="mt-6 flex flex-wrap justify-center gap-6 text-xs text-stone-500 border-t border-stone-100 pt-4 max-w-xl mx-auto">
-                <div><strong>Researcher:</strong> Gogulapati Sreeprada</div>
-                <div><strong>Advisors:</strong> Dr. Neelakantan Keshavan</div>
-                <div><strong>Institution:</strong> Indian Institute of Technology Hyderabad</div>
-                <div><strong>Department:</strong> Department of Design</div>
+            <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center border-t border-stone-200 pt-6 max-w-3xl mx-auto text-xs text-stone-600 font-medium">
+                <div class="p-2 bg-stone-50 rounded-lg border border-stone-100">
+                    <span class="block text-stone-400 uppercase tracking-wider mb-0.5">Researcher</span>
+                    <span class="text-stone-900 font-semibold text-sm">G. Sreeprada</span>
+                </div>
+                <div class="p-2 bg-stone-50 rounded-lg border border-stone-100">
+                    <span class="block text-stone-400 uppercase tracking-wider mb-0.5">Advisor</span>
+                    <span class="text-stone-900 font-semibold text-sm">Dr. N. Keshavan</span>
+                </div>
+                <div class="p-2 bg-stone-50 rounded-lg border border-stone-100">
+                    <span class="block text-stone-400 uppercase tracking-wider mb-0.5">Institution</span>
+                    <span class="text-stone-900 font-semibold text-sm">IIT Hyderabad</span>
+                </div>
+                <div class="p-2 bg-stone-50 rounded-lg border border-stone-100">
+                    <span class="block text-stone-400 uppercase tracking-wider mb-0.5">Department</span>
+                    <span class="text-stone-900 font-semibold text-sm">Dept. of Design</span>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-6 py-12 flex-grow w-full">
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-14 flex-grow w-full space-y-16">
         
-        <section class="mb-14">
-            <div class="flex items-center gap-3 mb-6 border-b border-stone-200 pb-2">
-                <span class="p-2 bg-indigo-50 text-indigo-700 rounded-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+        <!-- Section 1: Computational Engines -->
+        <section>
+            <div class="flex items-center gap-3 mb-8 border-b border-stone-200 pb-3">
+                <span class="p-2.5 bg-indigo-50 text-indigo-700 rounded-xl border border-indigo-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                    </svg>
                 </span>
-                <h2 class="serif-title text-2xl font-semibold text-stone-800">1. Computational Generation & Matrix Verification Engines</h2>
+                <div>
+                    <h2 class="serif-title text-2xl font-bold text-stone-900">1. Computational Generation & Matrix Verification Engines</h2>
+                    <p class="text-xs text-stone-500 mt-0.5">Interactive structural modeling, optimization frameworks, and layout sandboxes.</p>
+                </div>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200/80 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200 flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-semibold text-stone-800 text-lg">Parametric Grid Generator</h3>
-                            <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">App Framework</span>
+                        <div class="flex justify-between items-start gap-4 mb-2">
+                            <h3 class="font-bold text-stone-900 text-lg group-hover:text-indigo-900 transition-colors">Parametric Grid Generator</h3>
+                            <span class="text-[10px] uppercase font-bold tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded">App Framework</span>
                         </div>
-                        <p class="text-xs font-mono text-amber-800 mb-3">grid_parametric.html</p>
-                        <p class="text-sm text-stone-600">Enables real-time alteration of cell sizing bounds, targeted hole concentrations, edge insets, and rotation vectors with added spatial layout jitter controls.</p>
+                        <p class="text-xs font-medium text-amber-800 bg-amber-50/60 border border-amber-100 px-2 py-1 rounded inline-block mono-text mb-4">grid_parametric.html</p>
+                        <p class="text-sm text-stone-600 leading-relaxed">Enables real-time alteration of cell sizing bounds, targeted hole concentrations, edge insets, and rotation vectors with spatial layout jitter controls.</p>
                     </div>
-                    <a href="grid_parametric.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2.5 px-4 rounded transition">Launch Engine &rarr;</a>
+                    <a href="grid_parametric.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-900 hover:bg-indigo-700 text-white text-xs font-semibold py-3 px-4 rounded-xl transition-colors shadow-sm">
+                        Launch Engine &nbsp;&rarr;
+                    </a>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200/80 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200 flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-semibold text-stone-800 text-lg">Void Percentage Engine (Optimized)</h3>
-                            <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">Analytical</span>
+                        <div class="flex justify-between items-start gap-4 mb-2">
+                            <h3 class="font-bold text-stone-900 text-lg group-hover:text-indigo-900 transition-colors">Void Percentage Engine</h3>
+                            <span class="text-[10px] uppercase font-bold tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-0.5 rounded">Analytical</span>
                         </div>
-                        <p class="text-xs font-mono text-amber-800 mb-3">VP_multirow.html</p>
-                        <p class="text-sm text-stone-600">Calculates exact mathematical offset profiles for screen units to hit distinct solid-to-void thresholds up to the 37.24% theoretical limit.</p>
+                        <p class="text-xs font-medium text-amber-800 bg-amber-50/60 border border-amber-100 px-2 py-1 rounded inline-block mono-text mb-4">VP_multirow.html</p>
+                        <p class="text-sm text-stone-600 leading-relaxed">Calculates exact mathematical offset profiles for multi-row screen units to hit distinct solid-to-void thresholds up to the 37.24% theoretical optimization limit.</p>
                     </div>
-                    <a href="VP_multirow.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2.5 px-4 rounded transition">Launch Engine &rarr;</a>
+                    <a href="VP_multirow.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-900 hover:bg-emerald-700 text-white text-xs font-semibold py-3 px-4 rounded-xl transition-colors shadow-sm">
+                        Launch Engine &nbsp;&rarr;
+                    </a>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200/80 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200 flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-semibold text-stone-800 text-lg">Multi-Row Screen Array</h3>
-                            <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">Array Processor</span>
+                        <div class="flex justify-between items-start gap-4 mb-2">
+                            <h3 class="font-bold text-stone-900 text-lg group-hover:text-indigo-900 transition-colors">Multi-Row Screen Array</h3>
+                            <span class="text-[10px] uppercase font-bold tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded">Array Processor</span>
                         </div>
-                        <p class="text-xs font-mono text-amber-800 mb-3">VP_multirow.html</p>
-                        <p class="text-sm text-stone-600">Maps sequential stacking lines for modular tiles, aligning positive and negative mating connectors across multi-tiered elevation profiles.</p>
+                        <p class="text-xs font-medium text-amber-800 bg-amber-50/60 border border-amber-100 px-2 py-1 rounded inline-block mono-text mb-4">VP_multirow.html</p>
+                        <p class="text-sm text-stone-600 leading-relaxed">Maps continuous multi-row architectural stacking planes for modular tiles, meticulously aligning male-female structural mating tabs over staggered grids.</p>
                     </div>
-                    <a href="VP_multirow.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2.5 px-4 rounded transition">Launch Engine &rarr;</a>
+                    <a href="VP_multirow.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-900 hover:bg-indigo-700 text-white text-xs font-semibold py-3 px-4 rounded-xl transition-colors shadow-sm">
+                        Launch Engine &nbsp;&rarr;
+                    </a>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <!-- Card 4 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200/80 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200 flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-semibold text-stone-800 text-lg">Image Void Slider & Analyzer</h3>
-                            <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">Raster Processor</span>
+                        <div class="flex justify-between items-start gap-4 mb-2">
+                            <h3 class="font-bold text-stone-900 text-lg group-hover:text-indigo-900 transition-colors">Image Void Slider & Analyzer</h3>
+                            <span class="text-[10px] uppercase font-bold tracking-wider bg-purple-50 text-purple-700 border border-purple-100 px-2 py-0.5 rounded">Raster Engine</span>
                         </div>
-                        <p class="text-xs font-mono text-amber-800 mb-3">jaalivoidslider.html</p>
-                        <p class="text-sm text-stone-600">Utilizes custom HTML5 canvas pixel dilatation and erosion scripts to evaluate structural opacity metrics from arbitrary sample image maps.</p>
+                        <p class="text-xs font-medium text-amber-800 bg-amber-50/60 border border-amber-100 px-2 py-1 rounded inline-block mono-text mb-4">jaalivoidslider.html</p>
+                        <p class="text-sm text-stone-600 leading-relaxed">Utilizes custom HTML5 canvas pixel erosion/dilatation arrays to mathematically evaluate localized architectural opacity matrices from arbitrary bitmap images.</p>
                     </div>
-                    <a href="jaalivoidslider.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2.5 px-4 rounded transition">Launch Engine &rarr;</a>
+                    <a href="jaalivoidslider.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-900 hover:bg-purple-700 text-white text-xs font-semibold py-3 px-4 rounded-xl transition-colors shadow-sm">
+                        Launch Engine &nbsp;&rarr;
+                    </a>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <!-- Card 5 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200/80 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200 flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-semibold text-stone-800 text-lg">Mughal Pattern Creator</h3>
-                            <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">Canvas Generator</span>
+                        <div class="flex justify-between items-start gap-4 mb-2">
+                            <h3 class="font-bold text-stone-900 text-lg group-hover:text-indigo-900 transition-colors">Mughal Pattern Creator</h3>
+                            <span class="text-[10px] uppercase font-bold tracking-wider bg-orange-50 text-orange-700 border border-orange-100 px-2 py-0.5 rounded">Canvas Gen</span>
                         </div>
-                        <p class="text-xs font-mono text-amber-800 mb-3">JAALICREATOR.HTML</p>
-                        <p class="text-sm text-stone-600">Generates regional polygon compositions using fine controls for baseline scales, stroke thickness ratios, and contrasting filled parameters.</p>
+                        <p class="text-xs font-medium text-amber-800 bg-amber-50/60 border border-amber-100 px-2 py-1 rounded inline-block mono-text mb-4">JAALICREATOR.HTML</p>
+                        <p class="text-sm text-stone-600 leading-relaxed">Generates traditional regional polygon compositions using dynamic fine controls for baseline spatial scales, path weight ratios, and filled sub-regions.</p>
                     </div>
-                    <a href="JAALICREATOR.HTML" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2.5 px-4 rounded transition">Launch Engine &rarr;</a>
+                    <a href="JAALICREATOR.HTML" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-900 hover:bg-orange-700 text-white text-xs font-semibold py-3 px-4 rounded-xl transition-colors shadow-sm">
+                        Launch Engine &nbsp;&rarr;
+                    </a>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <!-- Card 6 -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200/80 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200 flex flex-col justify-between group">
                     <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-semibold text-stone-800 text-lg">Replication Pattern Matrix</h3>
-                            <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">SVG Generator</span>
+                        <div class="flex justify-between items-start gap-4 mb-2">
+                            <h3 class="font-bold text-stone-900 text-lg group-hover:text-indigo-900 transition-colors">Replication Pattern Matrix</h3>
+                            <span class="text-[10px] uppercase font-bold tracking-wider bg-cyan-50 text-cyan-700 border border-cyan-100 px-2 py-0.5 rounded">SVG Processor</span>
                         </div>
-                        <p class="text-xs font-mono text-amber-800 mb-3">repetationvariousjaali.html</p>
-                        <p class="text-sm text-stone-600">Simulates mass visual screens sorted by traditional geometric family sets (acute, median, obtuse) using Flower of Life proportions.</p>
+                        <p class="text-xs font-medium text-amber-800 bg-amber-50/60 border border-amber-100 px-2 py-1 rounded inline-block mono-text mb-4">repetationvariousjaali.html</p>
+                        <p class="text-sm text-stone-600 leading-relaxed">Simulates mass visual clusters grouped by fundamental geometric angles (acute, median, obtuse) mapping closely onto Flower of Life proportion layouts.</p>
                     </div>
-                    <a href="repetationvariousjaali.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2.5 px-4 rounded transition">Launch Engine &rarr;</a>
+                    <a href="repetationvariousjaali.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-900 hover:bg-cyan-700 text-white text-xs font-semibold py-3 px-4 rounded-xl transition-colors shadow-sm">
+                        Launch Engine &nbsp;&rarr;
+                    </a>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <!-- Card 7 (Legacy Sandbox) -->
+                <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between group opacity-85 hover:opacity-100 transition-opacity">
                     <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-semibold text-stone-800 text-lg">Void Percentage Engine (Base)</h3>
-                            <span class="text-xs bg-stone-100 text-stone-700 px-2 py-0.5 rounded font-medium">Legacy Sandbox</span>
+                        <div class="flex justify-between items-start gap-4 mb-2">
+                            <h3 class="font-semibold text-stone-700 text-lg">Void Percentage Engine (Base)</h3>
+                            <span class="text-[10px] uppercase font-bold tracking-wider bg-stone-200 text-stone-700 px-2 py-0.5 rounded">Legacy Baseline</span>
                         </div>
-                        <p class="text-xs font-mono text-amber-800 mb-3">VP.html</p>
-                        <p class="text-sm text-stone-600">The historical framework repository tracing initial analytical algorithms for mapping single tile boundaries against variable light-transmission scales.</p>
+                        <p class="text-xs font-medium text-stone-500 bg-stone-200/60 border border-stone-300/40 px-2 py-1 rounded inline-block mono-text mb-4">VP.html</p>
+                        <p class="text-sm text-stone-500 leading-relaxed">The original analytical sandbox used to calculate isolated tile perimeter bounds against raw linear light transmission profiles before multi-row tracking implementation.</p>
                     </div>
-                    <a href="VP.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium py-2.5 px-4 rounded transition">Launch Engine &rarr;</a>
+                    <a href="VP.html" target="_blank" class="mt-6 inline-flex items-center justify-center bg-stone-700 hover:bg-stone-800 text-white text-xs font-semibold py-3 px-4 rounded-xl transition-colors">
+                        Open Archive &nbsp;&rarr;
+                    </a>
                 </div>
 
             </div>
         </section>
 
-        <section class="mb-14">
-            <div class="flex items-center gap-3 mb-6 border-b border-stone-200 pb-2">
-                <span class="p-2 bg-amber-50 text-amber-800 rounded-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <!-- Section 2: Intellectual Property -->
+        <section>
+            <div class="flex items-center gap-3 mb-8 border-b border-stone-200 pb-3">
+                <span class="p-2.5 bg-amber-50 text-amber-800 rounded-xl border border-amber-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
                 </span>
-                <h2 class="serif-title text-2xl font-semibold text-stone-800">2. Intellectual Property, Patent Specifications, & Registrations</h2>
+                <div>
+                    <h2 class="serif-title text-2xl font-bold text-stone-900">2. Intellectual Property, Patent Specifications, & Registrations</h2>
+                    <p class="text-xs text-stone-500 mt-0.5">Formal statutory tracking, industrial design filings, and institutional registries.</p>
+                </div>
             </div>
 
-            <div class="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden p-6 text-stone-500 text-sm italic">
-                Intellectual property tables, data logs, and registration specifications follow...
+            <!-- IP Registry Table -->
+            <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-stone-50 border-b border-stone-200 text-stone-600 font-semibold tracking-wide text-xs uppercase">
+                                <th class="py-4 px-6">Registration ID / File</th>
+                                <th class="py-4 px-6">Classification Type</th>
+                                <th class="py-4 px-6">Technical Scope</th>
+                                <th class="py-4 px-6 text-right">Filing Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100 text-stone-700">
+                            <tr class="hover:bg-stone-50/80 transition-colors">
+                                <td class="py-4 px-6">
+                                    <span class="font-semibold text-stone-900 block">IN-2026410319</span>
+                                    <span class="text-xs font-medium text-stone-400 mono-text">patent_spec_tri.pdf</span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-100">Utility Patent</span>
+                                </td>
+                                <td class="py-4 px-6 text-stone-600">Interlocking triangular structural edge channels facilitating zero-clearance component joinery.</td>
+                                <td class="py-4 px-6 text-right font-medium text-emerald-600">Published / Under Review</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/80 transition-colors">
+                                <td class="py-4 px-6">
+                                    <span class="font-semibold text-stone-900 block">Des-Reg-914022</span>
+                                    <span class="text-xs font-medium text-stone-400 mono-text">design_reg_matrix.pdf</span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-800 border border-blue-100">Industrial Design</span>
+                                </td>
+                                <td class="py-4 px-6 text-stone-600">Ornamental configuration profiles for variable-aperture multi-row facade screening.</td>
+                                <td class="py-4 px-6 text-right font-medium text-stone-600">Registered</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/80 transition-colors">
+                                <td class="py-4 px-6">
+                                    <span class="font-semibold text-stone-900 block">IIT-H-SW-8821</span>
+                                    <span class="text-xs font-medium text-stone-400 mono-text">source_verification.zip</span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-800 border border-purple-100">Software Copyright</span>
+                                </td>
+                                <td class="py-4 px-6 text-stone-600">Automated analytical multi-row void calculation engine (up to 37.24% optimization limits).</td>
+                                <td class="py-4 px-6 text-right font-medium text-stone-600">Archived Institutional File</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
 
-    <footer class="border-t border-stone-200 bg-white py-6 text-center text-xs text-stone-400">
-        &copy; 2026 G. Sreeprada. Indian Institute of Technology Hyderabad. All Rights Reserved.
+    <!-- Footer Section -->
+    <footer class="border-t border-stone-200 bg-white py-8 text-center text-xs font-medium text-stone-500">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>&copy; 2026 Gogulapati Sreeprada. Indian Institute of Technology Hyderabad. All Rights Reserved.</div>
+            <div class="text-stone-400 text-[11px]">Department of Design &bull; Parametric Architectural Screen Appendix</div>
+        </div>
     </footer>
 
 </body>
