@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parametric Interlocking Multi-Row Array Processor — G. Sreeprada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FBF9F6; color: #333333; }
+        .serif-title { font-family: 'Playfair Display', serif; }
+        .grid-cell-btn { transition: all 0.2s ease-in-out; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-xl border border-stone-200 overflow-hidden">
+        <header class="bg-stone-900 text-white p-6 md:p-8 border-b border-stone-800">
+            <span class="text-xs font-semibold tracking-widest text-amber-400 uppercase bg-amber-950/50 px-3 py-1 rounded-full"> VP_multirow SVG generator, FEA, Venturi Airflow Estimator and Daylight & Glare Estimator.html</span>
+            <h1 class="serif-title text-2xl md:text-3xl font-bold mt-3 text-stone-100">Interlocking Modular Screen System Array Generator</h1>
+            <p class="text-stone-400 text-sm mt-1">Granular localized void manipulation with Venturi airflow, daylighting, and Plaster FEA Structural Wind Load evaluation.</p>
+        </header>
+
+        <div class="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-stone-200">
+            
+            <!-- CONTROLS SIDEBAR -->
+            <div class="w-full lg:w-1/3 p-6 bg-stone-50/50 space-y-6 flex-shrink-0">
+                <div>
+                    <h2 class="text-sm font-bold text-stone-800 uppercase tracking-wider mb-4">1. Global Geometry Constraints</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Side Length (s) cm</label>
+                            <input id="sideInput" type="number" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="30">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Wall Frame (gap) cm</label>
+                            <input id="gapInput" type="number" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="5">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Mating Depth (t) cm</label>
+                            <input id="thicknessInput" type="number" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="2">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Default Void % (Max 37.24%)</label>
+                            <input id="defaultVpInput" type="number" min="0.1" max="37.24" step="0.1" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="15">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-sm font-bold text-stone-800 uppercase tracking-wider mb-3">2. Climate & Building Bounds</h2>
+                    
+                    <!-- PRESET SUGGESTIONS BUTTONS -->
+                    <div class="mb-4 p-2.5 bg-stone-200/60 rounded-lg space-y-1.5">
+                        <span class="text-[10px] font-bold text-stone-600 uppercase block">Preset Climate Suggestions:</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button id="presetHotDry" type="button" class="text-[10px] bg-stone-800 text-white px-2 py-1 rounded hover:bg-stone-900 transition">Hot-Dry Summer</button>
+                            <button id="presetComposite" type="button" class="text-[10px] bg-stone-700 text-white px-2 py-1 rounded hover:bg-stone-800 transition">Composite Clear</button>
+                            <button id="presetMonsoon" type="button" class="text-[10px] bg-stone-600 text-white px-2 py-1 rounded hover:bg-stone-700 transition">Monsoon Overcast</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Columns</label>
+                            <input id="colsInput" type="number" min="1" max="12" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="6">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Rows</label>
+                            <input id="rowsInput" type="number" min="1" max="6" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="3">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Façade Orientation</label>
+                            <select id="orientationInput" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white">
+                                <option value="North">North (Diffused Light)</option>
+                                <option value="South" selected>South (High Solar Gain)</option>
+                                <option value="East">East (Morning Direct)</option>
+                                <option value="West">West (Afternoon Direct)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Wind Angle (°)</label>
+                            <input id="windAngleInput" type="number" step="5" min="0" max="90" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="0">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Wind Speed (v₁) m/s</label>
+                            <input id="windInput" type="number" step="0.1" min="0.1" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="2.5">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Ambient Temp (°C)</label>
+                            <input id="tempInput" type="number" step="0.5" min="10" max="55" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="40">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Exterior Lux (E_ext)</label>
+                            <input id="luxInput" type="number" step="500" min="1000" max="120000" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="10000">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Cloud Cover (%)</label>
+                            <input id="cloudCoverInput" type="number" step="5" min="0" max="100" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="80">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-xs font-semibold text-stone-600 mb-1">Target Room Floor Area (m²)</label>
+                            <input id="floorAreaInput" type="number" step="1" min="5" max="200" class="w-full p-2 border border-stone-300 rounded-lg text-sm bg-white" value="15">
+                        </div>
+                    </div>
+                    <button id="initializeGridBtn" class="w-full mt-4 bg-stone-800 hover:bg-stone-950 text-white text-xs font-bold py-2.5 px-4 rounded-lg transition shadow-sm">
+                        Reconstruct Array Layout
+                    </button>
+                </div>
+
+                <!-- CELL OVERRIDE PANEL -->
+                <div id="localizedControllerPanel" class="p-4 bg-amber-50/60 border border-amber-200/70 rounded-xl space-y-3 hidden">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-amber-900 uppercase tracking-wide">Cell Customization Panel</h3>
+                        <span id="selectedCellLabel" class="text-xs font-mono bg-amber-200/60 text-amber-900 px-2 py-0.5 rounded font-medium">Row: 0, Col: 0</span>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-medium text-stone-700">Target Local Void Space</label>
+                            <span id="localVpDisplay" class="text-xs font-mono font-bold text-amber-900">15.00%</span>
+                        </div>
+                        <input id="cellVpSlider" type="range" min="0.1" max="37.24" step="0.01" class="w-full accent-stone-700">
+                        <span class="text-[10px] text-stone-400 block mt-0.5">Absolute analytical limit bound: 37.24%</span>
+                    </div>
+                </div>
+
+                <!-- REAL-TIME STRUCTURAL FEA WIND LOAD DASHBOARD -->
+                <div class="p-4 bg-rose-950 text-rose-100 rounded-xl border border-rose-800 space-y-3">
+                    <div class="flex justify-between items-center border-b border-rose-800 pb-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-rose-300">Plaster Structural FEA (Wind Load)</h3>
+                        <span class="text-[10px] bg-rose-900 text-rose-300 font-mono px-2 py-0.5 rounded">Rankine FEA</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <span class="text-[10px] text-rose-300 block">Peak Wind Pressure (q_z)</span>
+                            <span id="feaWindPressure" class="font-mono font-bold text-sm text-white">0.00 Pa</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-rose-300 block">Total Net Wind Load (F_net)</span>
+                            <span id="feaNetForce" class="font-mono font-bold text-sm text-amber-300">0.00 N</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-rose-300 block">Max Tensile Stress (σ₁)</span>
+                            <span id="feaMaxStress" class="font-mono font-bold text-sm text-white">0.000 MPa</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-rose-300 block">Max Deflection (δ_max)</span>
+                            <span id="feaDeflection" class="font-mono font-bold text-sm text-white">0.000 mm</span>
+                        </div>
+                        <div class="col-span-2 border-t border-rose-800/80 pt-2 flex justify-between items-center">
+                            <div>
+                                <span class="text-[10px] text-rose-300 block">Safety Factor (Rankine Tensile)</span>
+                                <span id="feaSafetyFactor" class="font-mono font-bold text-sm text-emerald-400">SF: 0.00</span>
+                            </div>
+                            <span id="feaStatusBadge" class="text-[10px] font-bold font-mono px-2 py-1 rounded bg-emerald-900 text-emerald-200">STRUCTURALLY ADEQUATE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REAL-TIME AIRFLOW & THERMAL COOLING SIMULATION DASHBOARD -->
+                <div class="p-4 bg-teal-900/90 text-teal-100 rounded-xl border border-teal-800 space-y-3">
+                    <div class="flex justify-between items-center border-b border-teal-700/60 pb-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-teal-300">Venturi Airflow Estimator</h3>
+                        <span class="text-[10px] bg-teal-950 text-teal-300 font-mono px-2 py-0.5 rounded">Dynamic Physics</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <span class="text-[10px] text-teal-300 block">Selected Exit Speed</span>
+                            <span id="simLocalV2" class="font-mono font-bold text-sm text-amber-300">0.00 m/s</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-teal-300 block">Array Avg. Speed (v₂)</span>
+                            <span id="simV2" class="font-mono font-bold text-sm text-white">0.00 m/s</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-teal-300 block">Pressure Drop (ΔP)</span>
+                            <span id="simDeltaP" class="font-mono font-bold text-sm text-white">0.00 Pa</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-teal-300 block">Volumetric Flow (Q)</span>
+                            <span id="simFlowRate" class="font-mono font-bold text-sm text-white">0.0000 m³/s</span>
+                        </div>
+                        <div class="col-span-2 border-t border-teal-800/80 pt-2 grid grid-cols-2 gap-2">
+                            <div>
+                                <span class="text-[10px] text-teal-300 block">Dry Convective Drop (ΔT)</span>
+                                <span id="simDryTempDrop" class="font-mono font-bold text-sm text-amber-300">-0.0 °C</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-teal-300 block">Wetted Evaporative Drop</span>
+                                <span id="simEvapTempDrop" class="font-mono font-bold text-sm text-emerald-300">-0.0 °C</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REAL-TIME DAYLIGHT SIMULATION DASHBOARD -->
+                <div class="p-4 bg-indigo-950 text-indigo-100 rounded-xl border border-indigo-800 space-y-3">
+                    <div class="flex justify-between items-center border-b border-indigo-800 pb-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-300">Daylight & Glare Estimator</h3>
+                        <span class="text-[10px] bg-indigo-900 text-indigo-300 font-mono px-2 py-0.5 rounded">Radiance Model</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <span class="text-[10px] text-indigo-300 block">Daylight Factor (DF) [2–5% Target]</span>
+                            <span id="simDF" class="font-mono font-bold text-sm text-emerald-300">2.00 %</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-indigo-300 block">Daylight Glare Index (DGI)</span>
+                            <span id="simDGI" class="font-mono font-bold text-sm text-white">0.00</span>
+                        </div>
+                        <div class="col-span-2">
+                            <span class="text-[10px] text-indigo-300 block">Visual Comfort Assessment</span>
+                            <span id="simGlareStatus" class="font-mono font-bold text-xs text-emerald-300">Imperceptible Glare (Optimal Comfort)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- VIEWPORT & MATRIX -->
+            <div class="w-full lg:w-2/3 p-6 flex flex-col justify-between space-y-6 overflow-hidden">
+                <div>
+                    <h2 class="text-sm font-bold text-stone-800 uppercase tracking-wider mb-3">3. System Matrix Viewport</h2>
+                    <p class="text-xs text-stone-500 mb-4">Click any cell element below to dynamically override its specific light-transmission void properties.</p>
+                    
+                    <div class="w-full p-4 bg-stone-100 rounded-xl border border-stone-200 flex items-center justify-center overflow-auto max-h-[520px]">
+                        <div id="svgContainerWrapper" class="w-full flex items-center justify-center min-h-[300px]"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-sm font-bold text-stone-800 uppercase tracking-wider mb-3">4. Dynamic Mapping Matrix</h2>
+                    <div id="interactiveMapGrid" class="grid gap-2 p-3 bg-stone-50 border border-stone-200 rounded-xl overflow-x-auto min-h-[100px]"></div>
+                </div>
+
+                <div class="flex gap-4 border-t border-stone-100 pt-4">
+                    <div class="flex-grow">
+                        <label class="block text-[10px] font-bold text-stone-400 uppercase mb-1">Export Data Vector Specification</label>
+                        <textarea id="svgOutputDataBuffer" readonly class="w-full h-12 p-2 border border-stone-200 rounded-lg text-[10px] font-mono bg-stone-50 text-stone-500 select-all" placeholder="SVG trace sequence code blocks stream buffer..."></textarea>
+                    </div>
+                    <div class="flex items-end">
+                        <button id="downloadSvgDataBtn" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-3 px-5 rounded-lg transition whitespace-nowrap shadow-sm">
+                            Export Vector File (.svg)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const CM2PX = 37.79527559055118; 
+            const SR3 = Math.sqrt(3); 
+            const C1 = SR3 / (4 * SR3 - 2 * Math.PI); 
+            const MAX_VP_LIMIT = 37.24; // Absolute physical geometry limit
+
+            // --- PLASTER MATERIAL FEA PARAMETERS ---
+            const PLASTER_E = 4.5e9;           // Elastic Modulus (4.5 GPa)
+            const PLASTER_TENSILE_LIMIT = 2.5; // Allowable Tensile Strength in MPa (Rankine limit)
+            const CP_NET = 1.2;                // Net Wind Pressure Coefficient for screen
+
+            let systemState = {
+                s: 30, gap: 5, th: 2, defaultVp: 15, cols: 6, rows: 3, 
+                v1: 2.5, tAmbient: 40, eExt: 10000, cloudCover: 80, floorArea: 15,
+                orientation: 'South', windAngle: 0,
+                cells: [], selectedCellIndex: null
+            };
+
+            const ui = {
+                side: document.getElementById('sideInput'),
+                gap: document.getElementById('gapInput'),
+                thickness: document.getElementById('thicknessInput'),
+                defaultVp: document.getElementById('defaultVpInput'),
+                cols: document.getElementById('colsInput'),
+                rows: document.getElementById('rowsInput'),
+                wind: document.getElementById('windInput'),
+                temp: document.getElementById('tempInput'),
+                lux: document.getElementById('luxInput'),
+                cloudCover: document.getElementById('cloudCoverInput'),
+                floorArea: document.getElementById('floorAreaInput'),
+                orientation: document.getElementById('orientationInput'),
+                windAngle: document.getElementById('windAngleInput'),
+                presetHotDry: document.getElementById('presetHotDry'),
+                presetComposite: document.getElementById('presetComposite'),
+                presetMonsoon: document.getElementById('presetMonsoon'),
+                initBtn: document.getElementById('initializeGridBtn'),
+                mapGrid: document.getElementById('interactiveMapGrid'),
+                svgWrapper: document.getElementById('svgContainerWrapper'),
+                buffer: document.getElementById('svgOutputDataBuffer'),
+                downloadBtn: document.getElementById('downloadSvgDataBtn'),
+                localPanel: document.getElementById('localizedControllerPanel'),
+                cellLabel: document.getElementById('selectedCellLabel'),
+                cellVpSlider: document.getElementById('cellVpSlider'),
+                localVpLabel: document.getElementById('localVpDisplay'),
+                simLocalV2: document.getElementById('simLocalV2'),
+                simV2: document.getElementById('simV2'),
+                simDeltaP: document.getElementById('simDeltaP'),
+                simFlowRate: document.getElementById('simFlowRate'),
+                simDryTempDrop: document.getElementById('simDryTempDrop'),
+                simEvapTempDrop: document.getElementById('simEvapTempDrop'),
+                simDF: document.getElementById('simDF'),
+                simDGI: document.getElementById('simDGI'),
+                simGlareStatus: document.getElementById('simGlareStatus'),
+                feaWindPressure: document.getElementById('feaWindPressure'),
+                feaNetForce: document.getElementById('feaNetForce'),
+                feaMaxStress: document.getElementById('feaMaxStress'),
+                feaDeflection: document.getElementById('feaDeflection'),
+                feaSafetyFactor: document.getElementById('feaSafetyFactor'),
+                feaStatusBadge: document.getElementById('feaStatusBadge')
+            };
+
+            function syncInputsWithState() {
+                systemState.s = parseFloat(ui.side.value) || 30;
+                systemState.gap = parseFloat(ui.gap.value) || 5;
+                systemState.th = parseFloat(ui.thickness.value) || 2;
+                
+                let rawVp = parseFloat(ui.defaultVp.value) || 15;
+                if (rawVp > MAX_VP_LIMIT) {
+                    rawVp = MAX_VP_LIMIT;
+                    ui.defaultVp.value = MAX_VP_LIMIT;
+                } else if (rawVp < 0.1) {
+                    rawVp = 0.1;
+                    ui.defaultVp.value = 0.1;
+                }
+                systemState.defaultVp = rawVp;
+
+                systemState.cols = parseInt(ui.cols.value) || 6;
+                systemState.rows = parseInt(ui.rows.value) || 3;
+                systemState.v1 = parseFloat(ui.wind.value) || 2.5;
+                systemState.tAmbient = parseFloat(ui.temp.value) || 40;
+                systemState.eExt = parseFloat(ui.lux.value) || 10000;
+                systemState.cloudCover = parseFloat(ui.cloudCover.value) || 80;
+                systemState.floorArea = parseFloat(ui.floorArea.value) || 15;
+                systemState.orientation = ui.orientation.value;
+                systemState.windAngle = parseFloat(ui.windAngle.value) || 0;
+            }
+
+            function initializeSystemMatrix() {
+                syncInputsWithState();
+                systemState.cells = [];
+                systemState.selectedCellIndex = null;
+                ui.localPanel.classList.add('hidden');
+
+                for (let r = 0; r < systemState.rows; r++) {
+                    for (let c = 0; c < systemState.cols; c++) {
+                        const isUpright = (r + c) % 2 === 0;
+
+                        systemState.cells.push({
+                            row: r, col: c, isUpright, vp: systemState.defaultVp
+                        });
+                    }
+                }
+                renderInterfaceDashboard();
+            }
+
+            function renderInterfaceDashboard() {
+                renderInteractiveMap();
+                generateVectorMatrixOutput();
+                updateSimulations();
+            }
+
+            function renderInteractiveMap() {
+                ui.mapGrid.innerHTML = '';
+                ui.mapGrid.style.gridTemplateColumns = `repeat(${systemState.cols}, minmax(0, 1fr))`;
+
+                systemState.cells.forEach((cell, index) => {
+                    const cellBtn = document.createElement('button');
+                    cellBtn.className = `grid-cell-btn p-2 rounded-lg border text-left flex flex-col justify-between h-20 ${
+                        systemState.selectedCellIndex === index 
+                        ? 'border-amber-500 bg-amber-100/70 ring-2 ring-amber-400' 
+                        : 'border-stone-200 bg-white hover:bg-stone-50'
+                    }`;
+
+                    cellBtn.innerHTML = `
+                        <div class="flex justify-between items-center w-full">
+                            <span class="text-[10px] font-mono text-stone-400">R${cell.row} C${cell.col}</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-stone-700 text-white">Medium</span>
+                        </div>
+                        <div class="mt-2 flex justify-between items-end w-full">
+                            <span class="text-[10px] text-stone-500">${cell.isUpright ? '▲ Upright' : '▼ Inverted'}</span>
+                            <span class="text-xs font-bold text-stone-800 font-mono">${cell.vp.toFixed(1)}%</span>
+                        </div>
+                    `;
+
+                    cellBtn.addEventListener('click', () => selectCellInstance(index));
+                    ui.mapGrid.appendChild(cellBtn);
+                });
+            }
+
+            function selectCellInstance(index) {
+                systemState.selectedCellIndex = index;
+                const cell = systemState.cells[index];
+
+                ui.cellLabel.textContent = `Row: ${cell.row}, Col: ${cell.col}`;
+                ui.cellVpSlider.value = cell.vp;
+                ui.localVpLabel.textContent = `${cell.vp.toFixed(2)}%`;
+
+                ui.localPanel.classList.remove('hidden');
+                renderInteractiveMap();
+                updateSimulations();
+            }
+
+            ui.cellVpSlider.addEventListener('input', (e) => {
+                if (systemState.selectedCellIndex !== null) {
+                    let val = parseFloat(e.target.value);
+                    if (val > MAX_VP_LIMIT) val = MAX_VP_LIMIT;
+                    systemState.cells[systemState.selectedCellIndex].vp = val;
+                    ui.localVpLabel.textContent = `${val.toFixed(2)}%`;
+                    
+                    generateVectorMatrixOutput();
+                    updateSimulations();
+                    
+                    const activeGridBtn = ui.mapGrid.children[systemState.selectedCellIndex];
+                    if (activeGridBtn) {
+                        const vpDisplaySpan = activeGridBtn.querySelector('.font-mono.text-xs');
+                        if (vpDisplaySpan) {
+                            vpDisplaySpan.textContent = `${val.toFixed(1)}%`;
+                        }
+                    }
+                }
+            });
+
+            // PRESET SUGGESTIONS HANDLERS
+            ui.presetHotDry.addEventListener('click', () => {
+                ui.temp.value = 42; ui.wind.value = 3.0; ui.lux.value = 85000; ui.cloudCover.value = 10; ui.orientation.value = 'South';
+                syncInputsWithState(); updateSimulations();
+            });
+
+            ui.presetComposite.addEventListener('click', () => {
+                ui.temp.value = 35; ui.wind.value = 2.2; ui.lux.value = 45000; ui.cloudCover.value = 40; ui.orientation.value = 'South';
+                syncInputsWithState(); updateSimulations();
+            });
+
+            ui.presetMonsoon.addEventListener('click', () => {
+                ui.temp.value = 28; ui.wind.value = 4.5; ui.lux.value = 12000; ui.cloudCover.value = 90; ui.orientation.value = 'West';
+                syncInputsWithState(); updateSimulations();
+            });
+
+            ui.defaultVp.addEventListener('change', () => { syncInputsWithState(); initializeSystemMatrix(); });
+            ui.wind.addEventListener('input', () => { syncInputsWithState(); updateSimulations(); });
+            ui.temp.addEventListener('input', () => { syncInputsWithState(); updateSimulations(); });
+            ui.lux.addEventListener('input', () => { syncInputsWithState(); updateSimulations(); });
+            ui.cloudCover.addEventListener('input', () => { syncInputsWithState(); updateSimulations(); });
+            ui.floorArea.addEventListener('input', () => { syncInputsWithState(); updateSimulations(); });
+            ui.orientation.addEventListener('change', () => { syncInputsWithState(); updateSimulations(); });
+            ui.windAngle.addEventListener('input', () => { syncInputsWithState(); updateSimulations(); });
+
+            function updateSimulations() {
+                syncInputsWithState();
+                const rho = 1.225; 
+                
+                const windRad = (systemState.windAngle * Math.PI) / 180;
+                const incidentWindFactor = Math.max(Math.cos(windRad), 0.15);
+                const v1Effective = systemState.v1 * incidentWindFactor;
+
+                const sMeter = (systemState.s / 2) / 100; 
+                const tMeter = systemState.th / 100;       
+
+                let totalFlowRate = 0, sumV2 = 0, sumDeltaP = 0, sumVP = 0;
+
+                systemState.cells.forEach(cell => {
+                    const clampedVp = Math.min(cell.vp, MAX_VP_LIMIT);
+                    const vpRatio = Math.max(clampedVp / 100, 0.001);
+                    sumVP += vpRatio;
+
+                    // Venturi Airflow Acceleration
+                    const v2 = v1Effective / vpRatio;
+                    const deltaP = 0.5 * rho * (Math.pow(v2, 2) - Math.pow(v1Effective, 2));
+                    const moduleOuterArea = Math.pow(sMeter, 2) * SR3;
+                    const voidAreaM2 = moduleOuterArea * vpRatio;
+                    const qModule = voidAreaM2 * v2; 
+
+                    sumV2 += v2; sumDeltaP += deltaP; totalFlowRate += qModule;
+                });
+
+                const totalCells = systemState.cells.length || 1;
+                const avgV2 = sumV2 / totalCells;
+                const avgDeltaP = sumDeltaP / totalCells;
+                const avgVpRatio = sumVP / totalCells;
+
+                // Airflow UI Updates
+                if (systemState.selectedCellIndex !== null && systemState.cells[systemState.selectedCellIndex]) {
+                    const selVp = Math.max(Math.min(systemState.cells[systemState.selectedCellIndex].vp, MAX_VP_LIMIT) / 100, 0.001);
+                    ui.simLocalV2.textContent = `${(v1Effective / selVp).toFixed(2)} m/s`;
+                } else {
+                    ui.simLocalV2.textContent = `Select a Block`;
+                }
+
+                ui.simV2.textContent = `${avgV2.toFixed(2)} m/s`;
+                ui.simDeltaP.textContent = `${avgDeltaP.toFixed(1)} Pa`;
+                ui.simFlowRate.textContent = `${totalFlowRate.toFixed(4)} m³/s`;
+
+                // --- THERMAL COOLING / TEMPERATURE DROP CALCULATIONS ---
+                const dryDrop = 1.35 * Math.log(avgV2 / v1Effective || 1);
+                const rhEstimate = Math.min(Math.max(systemState.cloudCover, 15), 95);
+                const tWetBulb = systemState.tAmbient * (0.15 + (rhEstimate / 200) + 0.3); 
+                const evapEfficiency = 0.68; 
+                const evapDrop = Math.max((systemState.tAmbient - tWetBulb) * evapEfficiency, 0);
+
+                ui.simDryTempDrop.textContent = `-${dryDrop.toFixed(1)} °C`;
+                ui.simEvapTempDrop.textContent = `-${evapDrop.toFixed(1)} °C`;
+
+                // --- DAYLIGHT FACTOR (DF) AND GLARE (DGI/DGP) ---
+                let orientationSolarMultiplier = 1.0;
+                if (systemState.orientation === 'North') orientationSolarMultiplier = 0.50;
+                if (systemState.orientation === 'South') orientationSolarMultiplier = 1.25;
+                if (systemState.orientation === 'East' || systemState.orientation === 'West') orientationSolarMultiplier = 0.95;
+
+                const bMeter = sMeter * Math.sqrt(avgVpRatio * C1);
+                const depthAspect = tMeter / (bMeter * SR3 || 0.01);
+                const fDepth = Math.max(1 / (1 + 1.2 * depthAspect), 0.2); 
+
+                const moduleOuterAreaM2 = Math.pow(sMeter, 2) * SR3;
+                const totalScreenVoidAreaM2 = moduleOuterAreaM2 * sumVP;
+                const userFloorArea = Math.max(systemState.floorArea, 1.0);
+                
+                const rawDaylightFactor = (totalScreenVoidAreaM2 / userFloorArea) * 0.85 * 100 * 2.8 * fDepth * orientationSolarMultiplier;
+
+                const skyCloudOpacity = 1 - (systemState.cloudCover / 200);
+                const effectiveLux = systemState.eExt * orientationSolarMultiplier * skyCloudOpacity;
+                const cavityLuminance = (effectiveLux / Math.PI) * avgVpRatio * fDepth;
+                const dgi = 10 * Math.log10(Math.max(0.35 * Math.pow(cavityLuminance, 1.4) * Math.pow(avgVpRatio, 0.8), 1));
+
+                const verticalIlluminance = effectiveLux * avgVpRatio * fDepth;
+                const dgp = (5.87e-5 * verticalIlluminance) + (0.0918 * Math.log10(1 + (cavityLuminance / 2000))) + 0.15;
+                const dgpPercent = Math.min(Math.max(dgp * 100, 16), 100);
+
+                ui.simDF.textContent = `${rawDaylightFactor.toFixed(2)} %`;
+                ui.simDGI.textContent = `${Math.max(dgi, 0).toFixed(1)}`;
+
+                if (dgpPercent < 35) {
+                    ui.simGlareStatus.textContent = "Imperceptible Glare (Optimal Comfort)";
+                    ui.simGlareStatus.className = "font-mono font-bold text-xs text-emerald-300";
+                } else if (dgpPercent >= 35 && dgpPercent < 40) {
+                    ui.simGlareStatus.textContent = "Perceptible Glare (Balanced Illumination)";
+                    ui.simGlareStatus.className = "font-mono font-bold text-xs text-amber-300";
+                } else if (dgpPercent >= 40 && dgpPercent < 45) {
+                    ui.simGlareStatus.textContent = "Disturbing Glare (Consider Local Shading)";
+                    ui.simGlareStatus.className = "font-mono font-bold text-xs text-orange-400";
+                } else {
+                    ui.simGlareStatus.textContent = "Intolerable Glare (High Visual Discomfort)";
+                    ui.simGlareStatus.className = "font-mono font-bold text-xs text-rose-400";
+                }
+
+                // --- STRUCTURAL & PLASTER FEA WIND LOAD EVALUATION ---
+                const qz = 0.5 * rho * Math.pow(v1Effective, 2); // Dynamic wind velocity pressure (Pa)
+                const totalGrossAreaM2 = moduleOuterAreaM2 * totalCells;
+                const netSolidAreaM2 = totalGrossAreaM2 * (1 - avgVpRatio);
+                const F_net = qz * CP_NET * netSolidAreaM2; // Total Wind Force (N)
+
+                // Moment and Bending Stress (Simplified Plate Bending Analogy for Multi-Row Screen)
+                const screenHeightM = systemState.rows * (sMeter * SR3);
+                const M_max = (F_net * screenHeightM) / 8; // Max bending moment (N*m)
+                
+                const I_net = (systemState.cols * tMeter * Math.pow(sMeter, 3) * (1 - avgVpRatio)) / 12; // Net Moment of Inertia
+                const Kt = 1.5 + (avgVpRatio * 1.8); // Stress Concentration Factor due to inner void curvature
+                const sigma_1_Pa = (M_max * (sMeter / 2) / Math.max(I_net, 1e-8)) * Kt;
+                const sigma_1_MPa = sigma_1_Pa / 1e6; // Max Principal Tensile Stress in MPa
+
+                // Deflection Calculation (Simply-supported lateral screen approximation)
+                const delta_m = (5 * F_net * Math.pow(screenHeightM, 3)) / (384 * PLASTER_E * Math.max(I_net, 1e-8));
+                const delta_mm = delta_m * 1000;
+
+                const safetyFactor = PLASTER_TENSILE_LIMIT / Math.max(sigma_1_MPa, 0.001);
+
+                ui.feaWindPressure.textContent = `${qz.toFixed(2)} Pa`;
+                ui.feaNetForce.textContent = `${F_net.toFixed(2)} N`;
+                ui.feaMaxStress.textContent = `${sigma_1_MPa.toFixed(3)} MPa`;
+                ui.feaDeflection.textContent = `${delta_mm.toFixed(3)} mm`;
+                ui.feaSafetyFactor.textContent = `SF: ${safetyFactor.toFixed(2)}`;
+
+                if (safetyFactor >= 3.0) {
+                    ui.feaStatusBadge.textContent = "STRUCTURALLY ADEQUATE";
+                    ui.feaStatusBadge.className = "text-[10px] font-bold font-mono px-2 py-1 rounded bg-emerald-900 text-emerald-200";
+                } else if (safetyFactor >= 1.5 && safetyFactor < 3.0) {
+                    ui.feaStatusBadge.textContent = "MODERATE RISK (CHECK CORNERS)";
+                    ui.feaStatusBadge.className = "text-[10px] font-bold font-mono px-2 py-1 rounded bg-amber-900 text-amber-200";
+                } else {
+                    ui.feaStatusBadge.textContent = "TENSILE FAILURE RISK";
+                    ui.feaStatusBadge.className = "text-[10px] font-bold font-mono px-2 py-1 rounded bg-rose-900 text-rose-200";
+                }
+            }
+
+            function generateVectorMatrixOutput() {
+                const s = (systemState.s / 2) * CM2PX; 
+                const th = systemState.th * CM2PX;    
+                const h = s * SR3;                    
+
+                const colWidthStep = s; 
+                const rowHeightStep = h; 
+
+                const paddingShift = th * 4;
+                const totalWidth = colWidthStep * (systemState.cols + 1) + (paddingShift * 2);
+                const totalHeight = rowHeightStep * systemState.rows + (paddingShift * 2);
+
+                let svgContent = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n`; 
+                svgContent += `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}" width="100%" height="100%" style="background-color: #ffffff;">\n`;
+                svgContent += `  <g transform="translate(${paddingShift}, ${paddingShift})">\n`;
+
+                systemState.cells.forEach((cell) => {
+                    const deltaX = cell.col * colWidthStep;
+                    const deltaY = cell.row * rowHeightStep;
+
+                    svgContent += `    <g transform="translate(${deltaX}, ${deltaY})">\n`;
+                    if (cell.isUpright) {
+                        svgContent += generateUprightBlock(s, h, th, Math.min(cell.vp, MAX_VP_LIMIT));
+                    } else {
+                        svgContent += generateInvertedBlock(s, h, th, Math.min(cell.vp, MAX_VP_LIMIT));
+                    }
+                    svgContent += `    </g>\n`;
+                });
+
+                svgContent += `  </g>\n</svg>`;
+
+                ui.svgWrapper.innerHTML = svgContent;
+                ui.buffer.value = svgContent;
+            }
+
+            function generateUprightBlock(s, h, th, vp) {
+                const b = s * Math.sqrt((vp / 100) * C1); 
+                const r = b * 2;                          
+                const R = (s + s) / SR3;                  
+                const innerRadius = (b + b) / SR3;        
+                const tInner = (s - b) / SR3;             
+
+                const Ap = { x: 0, y: h };
+                const Bp = { x: s, y: 0 };
+                const Cp = { x: s * 2, y: h };
+
+                const Gp = { x: s - b, y: h - tInner };
+                const Hp = { x: s, y: R - innerRadius };
+                const Ip = { x: s + b, y: h - tInner };
+
+                let pathStr = "";
+                pathStr += `      <path d="M ${Ap.x} ${Ap.y} L ${Bp.x} ${Bp.y} L ${Cp.x} ${Cp.y} Z" fill="#000000" stroke="#ffffff" stroke-width="1" />\n`;
+                pathStr += `      <path d="M ${Gp.x} ${Gp.y} A ${r} ${r} 0 0 1 ${Ip.x} ${Ip.y} A ${r} ${r} 0 0 1 ${Hp.x} ${Hp.y} A ${r} ${r} 0 0 1 ${Gp.x} ${Gp.y} Z" fill="#ffffff" />\n`;
+                return pathStr;
+            }
+
+            function generateInvertedBlock(s, h, th, vp) {
+                const b = s * Math.sqrt((vp / 100) * C1);
+                const r = b * 2;
+                const R = (s + s) / SR3;
+                const innerRadius = (b + b) / SR3;
+                const tInner = (s - b) / SR3;
+
+                const Bp = { x: 0, y: 0 };
+                const Ap = { x: s, y: h };
+                const Cp = { x: s * 2, y: 0 };
+
+                const Gp = { x: s - b, y: tInner };
+                const Hp = { x: s, y: h - (R - innerRadius) };
+                const Ip = { x: s + b, y: tInner };
+
+                let pathStr = "";
+                pathStr += `      <path d="M ${Bp.x} ${Bp.y} L ${Ap.x} ${Ap.y} L ${Cp.x} ${Cp.y} Z" fill="#000000" stroke="#ffffff" stroke-width="1" />\n`;
+                pathStr += `      <path d="M ${Gp.x} ${Gp.y} A ${r} ${r} 0 0 0 ${Ip.x} ${Ip.y} A ${r} ${r} 0 0 0 ${Hp.x} ${Hp.y} A ${r} ${r} 0 0 0 ${Gp.x} ${Gp.y} Z" fill="#ffffff" />\n`;
+                return pathStr;
+            }
+
+            ui.downloadBtn.addEventListener('click', () => {
+                const blob = new Blob([ui.buffer.value], { type: 'image/svg+xml;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `Sreeprada_MediumBlocks_JaaliMatrix_${systemState.cols}x${systemState.rows}.svg`;
+                link.click();
+            });
+
+            ui.initBtn.addEventListener('click', initializeSystemMatrix);
+
+            initializeSystemMatrix();
+        });
+    </script>
+</body>
+</html>
