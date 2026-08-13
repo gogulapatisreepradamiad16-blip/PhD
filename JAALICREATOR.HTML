@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mughal Jaali Pattern Generator</title>
+    <title> Jaali Pattern Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -71,7 +71,7 @@
 
     <div class="w-full max-w-6xl bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Mughal Jaali Pattern Generator</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">  Jaali Pattern Generator</h1>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -85,7 +85,7 @@
                 <div class="mb-5">
                     <label for="patternSelect">Pattern Style</label>
                     <select id="patternSelect">
-                        <option value="mughalHexStar">Mughal Hexagon & Star</option>
+                        <option value=" HexStar">  Hexagon & Star</option>
                         <option value="eightPointRosette">Eight-Point Rosette</option>
                         <option value="twelvePointStar">Twelve-Point Star</option>
                         <option value="hexRosetteGrid">Hexagonal Rosette Grid</option>
@@ -142,7 +142,7 @@
 
             // State - Adjusted to high-contrast styles immediately
             const state = {
-                pattern: 'mughalHexStar',
+                pattern: ' HexStar',
                 voidSize: 0.75,
                 scale: 80,
                 solidColor: '#1e293b',
@@ -176,7 +176,7 @@
 
             // --- Pattern Drawing Logic Map ---
             const patternDrawers = {
-                mughalHexStar: drawMughalHexStar,
+                 HexStar: draw HexStar,
                 eightPointRosette: drawEightPointRosette,
                 twelvePointStar: drawTwelvePointStar,
                 hexRosetteGrid: drawHexRosetteGrid,
@@ -196,7 +196,7 @@
             
             // --- Individual Pattern Functions ---
 
-            function drawMughalHexStar(ctx, width, height, scale, voidSize) {
+            function draw HexStar(ctx, width, height, scale, voidSize) {
                 const r = scale;
                 const h = r * Math.sqrt(3);
 
