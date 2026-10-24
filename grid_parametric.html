@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Parametric Jaali Generator — Sreeprada</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; margin: 0; display:flex; height:100vh; }
+    .panel { width:340px; padding:18px; box-sizing:border-box; border-right:1px solid #eee; background:#fbfbfb; overflow:auto; }
+    h1 { margin:0 0 8px 0; font-size:18px; }
+    label { font-size:13px; display:block; margin-top:10px; color:#333; }
+    input[type=range], input[type=number], select { width:100%; }
+    .controls-row { display:flex; gap:8px; }
+    button { margin-top:12px; padding:8px 12px; background:#1f73ff; color:white; border:none; border-radius:6px; cursor:pointer; }
+    button.secondary { background:#444; margin-left:8px; }
+    #previewWrap { flex:1; display:flex; align-items:center; justify-content:center; background:#fff; }
+    svg { width:100%; height:100%; }
+    .meta { font-size:12px; color:#666; margin-top:8px; }
+    .small { font-size:12px; color:#555; margin-top:6px; }
+    .hot { color:#1f73ff; font-weight:600 }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>Parametric Jaali Generator</h1>
+    <div class="small">Generate repeatable jaali patterns and export as SVG. Designed for quick prototyping.</div>
+
+    <label>Pattern type</label>
+    <select id="patternType">
+      <option value="square">Square grid (hole centered)</option>
+      <option value="hex">Hexagonal</option>
+      <option value="tri">Triangular</option>
+      <option value="circle">Circles lattice</option>
+      <option value="polygon">Regular polygon motif</option>
+    </select>
+
+    <label>Canvas width (mm)</label>
+    <input id="canvasW" type="number" value="600" min="50" max="5000">
+
+    <label>Canvas height (mm)</label>
+    <input id="canvasH" type="number" value="400" min="50" max="5000">
+
+    <label>Cell size (mm)</label>
+    <input id="cellSize" type="range" min="10" max="200" value="60">
+    <div class="controls-row"><input id="cellSizeN" type="number" value="60" min="10" max="200"></div>
+
+    <label>Hole / motif size (%) — (percent of cell)</label>
+    <input id="holePct" type="range" min="10" max="95" value="45">
+    <div class="controls-row"><input id="holePctN" type="number" value="45" min="10" max="95"></div>
+
+    <label>Inset / bridge thickness (mm)</label>
+    <input id="inset" type="range" min="0" max="20" value="4">
+    <div class="controls-row"><input id="insetN" type="number" value="4" min="0" max="20"></div>
+
+    <label>Rotation (degrees)</label>
+    <input id="rotation" type="range" min="0" max="360" value="0">
+    <div class="controls-row"><input id="rotationN" type="number" value="0" min="0" max="360"></div>
+
+    <label>Random jitter (mm) — small randomness in motif center</label>
+    <input id="jitter" type="range" min="0" max="20" value="0">
+    <div class="controls-row"><input id="jitterN" type="number" value="0" min="0" max="20"></div>
+
+    <label>Polygon sides (if polygon)</label>
+    <input id="polySides" type="number" min="3" max="12" value="6">
+
+    <label>Stroke (cut kerf preview, mm)</label>
+    <input id="strokeWidth" type="range" min="0" max="5" value="0.4">
+    <div class="controls-row"><input id="strokeWidthN" type="number" value="0.4" step="0.1"></div>
+
+    <label>Show grid lines</label>
+    <select id="showGrid">
+      <option value="no">No (clean)</option>
+      <option value="yes">Yes (for reference)</option>
+    </select>
+
+    <div style="margin-top:12px;">
+      <button id="regen">Regenerate</button>
+      <button id="download">Download SVG</button>
+      <button id="copySVG" class="secondary">Copy SVG markup</button>
+    </div>
+
+    <div class="meta">Tip: Use <span class="hot">cell size</span> + <span class="hot">hole %</span> to control porosity. Keep inset/bridge >= 2–3 mm for structural integrity on thin materials.</div>
+  </div>
+
+  <div id="previewWrap">
+    <!-- svg will go here -->
+    <svg id="svgRoot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+<script>
+/* Parametric Jaali Generator
+   Units: user inputs in mm; SVG output uses mm units (SVG width/height set accordingly)
+   Basic patterns: square, hex, tri, circle, polygon
+   Bridges/inset: offset from motif to keep structural ribs
+   Author: ChatGPT (Sreeprada-friendly version)
+*/
+
+// Utility
+const $ = id => document.getElementById(id);
+
+function mm(n){ return Number(n); }
+
+function createSVGElement(tag, attrs = {}) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) {
+    el.setAttribute(k, attrs[k]);
+  }
+  return el;
+}
+
+function clear(svg) {
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+}
+
+function randRange(r) { return (Math.random()*2-1) * r; }
+
+// Main generator
+function generate() {
+  const svg = $('svgRoot');
+  const canvasW = mm($('canvasW').value);
+  const canvasH = mm($('canvasH').value);
+  const cell = mm($('cellSizeN').value);
+  const holePct = mm($('holePctN').value)/100;
+  const inset = mm($('insetN').value);
+  const rotation = Number($('rotationN').value) * Math.PI/180;
+  const jitter = mm($('jitterN').value);
+  const polySides = Math.max(3, Math.round(Number($('polySides').value)));
+  const stroke = Number($('strokeWidthN').value);
+
+  // set svg size in mm and viewbox
+  svg.setAttribute('width', canvasW + 'mm');
+  svg.setAttribute('height', canvasH + 'mm');
+  svg.setAttribute('viewBox', `0 0 ${canvasW} ${canvasH}`);
+
+  clear(svg);
+
+  // optionally draw grid helper
+  if ($('showGrid').value === 'yes') {
+    const g = createSVGElement('g', { stroke:'#eee', 'stroke-width':0.2 });
+    for (let x=0; x<=canvasW; x+=cell) {
+      g.appendChild(createSVGElement('line', { x1:x, y1:0, x2:x, y2:canvasH }));
+    }
+    for (let y=0; y<=canvasH; y+=cell) {
+      g.appendChild(createSVGElement('line', { x1:0, y1:y, x2:canvasW, y2:y }));
+    }
+    svg.appendChild(g);
+  }
+
+  // group for motifs
+  const motifsG = createSVGElement('g', { transform: `rotate(${Number($('rotationN').value)} ${canvasW/2} ${canvasH/2})` });
+
+  const type = $('patternType').value;
+
+  // layout offsets for hex/tri
+  let offsets = [];
+  if (type === 'square' || type === 'circle' || type === 'polygon') {
+    for (let y=0; y<canvasH; y+=cell) {
+      for (let x=0; x<canvasW; x+=cell) offsets.push([x+cell/2, y+cell/2]);
+    }
+  } else if (type === 'hex') {
+    const h = cell * Math.sqrt(3)/2;
+    let row = 0;
+    for (let y=0; y<canvasH + h; y+=h) {
+      for (let x=0; x<canvasW + cell; x+=cell) {
+        const rx = x + ((row%2)*cell/2);
+        offsets.push([rx + cell/2, y + cell/2]);
+      }
+      row++;
+    }
+  } else if (type === 'tri') {
+    const h = cell * Math.sqrt(3)/2;
+    let row = 0;
+    for (let y=0; y<canvasH + h; y+=h) {
+      for (let x=0; x<canvasW + cell; x+=cell) {
+        const rx = x + ((row%2)*cell/2);
+        offsets.push([rx + cell/2, y + cell/2]);
+      }
+      row++;
+    }
+  }
+
+  // create motif at center positions
+  const motifPaths = []; // for boolean union if needed (not implemented complex boolean)
+  offsets.forEach(([cx,cy]) => {
+    // apply jitter
+    const jx = cx + (jitter ? randRange(jitter) : 0);
+    const jy = cy + (jitter ? randRange(jitter) : 0);
+
+    // bounding check (clip motifs outside a margin)
+    if (jx < -cell || jx > canvasW + cell || jy < -cell || jy > canvasH + cell) return;
+
+    if (type === 'square') {
+      const r = (cell/2) * holePct;
+      // square hole
+      const p = createSVGElement('rect', {
+        x: (jx - r), y:(jy - r), width: r*2, height: r*2,
+        fill:'#000', stroke:'none'
+      });
+      motifsG.appendChild(p);
+    } else if (type === 'circle') {
+      const r = (cell/2) * holePct;
+      const c = createSVGElement('circle', {
+        cx:jx, cy:jy, r:r, fill:'#000'
+      });
+      motifsG.appendChild(c);
+    } else if (type === 'hex') {
+      const r = (cell/2) * holePct;
+      const path = polygonPath(jx, jy, r, 6);
+      const p = createSVGElement('path', { d:path, fill:'#000' });
+      motifsG.appendChild(p);
+    } else if (type === 'tri') {
+      const r = (cell/2) * holePct;
+      const path = polygonPath(jx, jy, r, 3);
+      const p = createSVGElement('path', { d:path, fill:'#000' });
+      motifsG.appendChild(p);
+    } else if (type === 'polygon') {
+      const r = (cell/2) * holePct;
+      const path = polygonPath(jx, jy, r, polySides);
+      motifsG.appendChild(createSVGElement('path', { d:path, fill:'#000' }));
+    }
+  });
+
+  // Now we have motifs (holes). We need to create a 'solid' with holes cut out.
+  // Simple approach: create a rect for full panel, then use <mask> to cut out motifs.
+  const panel = createSVGElement('rect', { x:0, y:0, width:canvasW, height:canvasH, fill:'#000' });
+
+  // mask: white = keep, black = cut (invert logic) -> We'll create a mask where shapes are white (visible) and panel uses mask to show holes
+  // Simpler and robust: create a background rect (solid) and overlay motifs in white and then export final by inverting later in editor.
+  // Better approach: use <clipPath> or <mask>. We'll use mask where mask white = visible -> draw white background then black motifs.
+  const mask = createSVGElement('mask', { id:'m1' });
+  // white background
+  mask.appendChild(createSVGElement('rect', { x:0, y:0, width:canvasW, height:canvasH, fill:'#ffffff' }));
+  // motifs -> make them black to cut out (we'll set fill black)
+  // But mask: white shows, black hides. So add motifs as black.
+  // We created motifsG containing filled black shapes; clone them into mask but set fill black.
+  // To clone, we need to iterate offsets again and add shapes to mask.
+  const motifsMaskGroup = createSVGElement('g', {});
+  offsets.forEach(([cx,cy]) => {
+    const jx = cx + (jitter ? randRange(jitter) : 0);
+    const jy = cy + (jitter ? randRange(jitter) : 0);
+    if (jx < -cell || jx > canvasW + cell || jy < -cell || jy > canvasH + cell) return;
+
+    if (type === 'square') {
+      const r = (cell/2) * holePct;
+      motifsMaskGroup.appendChild(createSVGElement('rect', { x: (jx - r), y:(jy - r), width: r*2, height: r*2, fill:'#000' }));
+    } else if (type === 'circle') {
+      const r = (cell/2) * holePct;
+      motifsMaskGroup.appendChild(createSVGElement('circle', { cx:jx, cy:jy, r:r, fill:'#000' }));
+    } else if (type === 'hex') {
+      const r = (cell/2) * holePct;
+      motifsMaskGroup.appendChild(createSVGElement('path', { d:polygonPath(jx,jy,r,6), fill:'#000' }));
+    } else if (type === 'tri') {
+      const r = (cell/2) * holePct;
+      motifsMaskGroup.appendChild(createSVGElement('path', { d:polygonPath(jx,jy,r,3), fill:'#000' }));
+    } else if (type === 'polygon') {
+      const r = (cell/2) * holePct;
+      motifsMaskGroup.appendChild(createSVGElement('path', { d:polygonPath(jx,jy,r,polySides), fill:'#000' }));
+    }
+  });
+
+  mask.appendChild(motifsMaskGroup);
+  svg.appendChild(mask);
+
+  // create final panel rect that uses mask (white visible - holes black will be hidden)
+  const finalRect = createSVGElement('rect', {
+    x:0, y:0, width:canvasW, height:canvasH,
+    fill:'#000', mask:'url(#m1)'
+  });
+  svg.appendChild(finalRect);
+
+  // optionally draw stroke preview (outline of holes as thin lines) for kerf
+  if (stroke > 0) {
+    const strokesG = createSVGElement('g', { fill:'none', stroke:'#000', 'stroke-width': stroke });
+    // add outlines of motifs
+    offsets.forEach(([cx,cy]) => {
+      const jx = cx;
+      const jy = cy;
+      if (jx < -cell || jx > canvasW + cell || jy < -cell || jy > canvasH + cell) return;
+      if (type === 'square') {
+        const r = (cell/2) * holePct;
+        strokesG.appendChild(createSVGElement('rect', { x:(jx - r), y:(jy - r), width:r*2, height:r*2 }));
+      } else if (type === 'circle') {
+        const r = (cell/2) * holePct;
+        strokesG.appendChild(createSVGElement('circle', { cx: jx, cy: jy, r: r }));
+      } else {
+        const r = (cell/2) * holePct;
+        strokesG.appendChild(createSVGElement('path', { d: polygonPath(jx,jy,r, type==='hex'?6:(type==='tri'?3:polySides)) }));
+      }
+    });
+    svg.appendChild(strokesG);
+  }
+
+  // final small note: add a thin white stroke around svg border for clarity (optional)
+  const border = createSVGElement('rect', { x:0, y:0, width:canvasW, height:canvasH, fill:'none', stroke:'#ccc', 'stroke-width':0.5 });
+  svg.appendChild(border);
+}
+
+function polygonPath(cx, cy, r, sides=6) {
+  let d = '';
+  for (let i=0; i<sides; i++) {
+    const a = (i/sides) * Math.PI*2 - Math.PI/2;
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    d += (i===0? 'M':' L') + x.toFixed(3) + ' ' + y.toFixed(3);
+  }
+  d += ' Z';
+  return d;
+}
+
+// link UI
+function syncRange(rangeId, numId) {
+  const r = $(rangeId), n = $(numId);
+  r.addEventListener('input', ()=> { n.value = r.value; });
+  n.addEventListener('input', ()=> { r.value = n.value; generate(); });
+  r.addEventListener('change', generate);
+}
+syncRange('cellSize','cellSizeN');
+syncRange('holePct','holePctN');
+syncRange('inset','insetN');
+syncRange('rotation','rotationN');
+syncRange('jitter','jitterN');
+syncRange('strokeWidth','strokeWidthN');
+
+['patternType','canvasW','canvasH','polySides','showGrid'].forEach(id => {
+  $(id).addEventListener('change', generate);
+});
+
+$('regen').addEventListener('click', generate);
+
+$('download').addEventListener('click', () => {
+  const svg = $('svgRoot');
+  const serializer = new XMLSerializer();
+  const svgString = serializer.serializeToString(svg);
+  const blob = new Blob([svgString], {type: 'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'jaali.svg';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+$('copySVG').addEventListener('click', () => {
+  const svg = $('svgRoot');
+  const serializer = new XMLSerializer();
+  const svgString = serializer.serializeToString(svg);
+  navigator.clipboard.writeText(svgString).then(()=> alert('SVG copied to clipboard'));
+});
+
+// initial generate
+generate();
+</script>
+</body>
+</html>
