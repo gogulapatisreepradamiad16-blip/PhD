@@ -21,13 +21,13 @@
     <header class="border-b border-stone-200 bg-white py-12 px-6 text-center shadow-sm relative overflow-hidden">
         <div class="max-w-5xl mx-auto relative z-10">
             <span class="text-xs font-bold tracking-widest text-amber-800 uppercase bg-amber-50 border border-amber-200/60 px-4 py-1.5 rounded-full inline-block">
-                Doctoral Research Digital Compendium
+                Doctoral Research Digital Compendium & Appendix
             </span>
             <h1 class="serif-title text-3xl sm:text-5xl mt-5 font-bold text-stone-900 leading-tight">
                 Modular Triangular Screen System with Complementary Interlocking Components
             </h1>
             <p class="mt-4 text-stone-600 max-w-3xl mx-auto text-base sm:text-lg">
-                Parametric Structural Modules, Geometrical Pattern Generators, and Multi-Physics Simulation Engines
+                Parametric Modules, Pattern Generators, Multi-Physics Simulation Engines, and Intellectual Property Artifacts
             </p>
             
             <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center border-t border-stone-200 pt-6 max-w-3xl mx-auto text-xs text-stone-600 font-medium">
@@ -45,8 +45,9 @@
             <button onclick="filterCategory('all')" id="filter-all" class="filter-btn active text-xs font-semibold px-4 py-2 rounded-xl border transition-all">All Files</button>
             <button onclick="filterCategory('progression')" id="filter-progression" class="filter-btn text-xs font-semibold px-4 py-2 rounded-xl border transition-all bg-white text-stone-700">VP Progressions</button>
             <button onclick="filterCategory('generators')" id="filter-generators" class="filter-btn text-xs font-semibold px-4 py-2 rounded-xl border transition-all bg-white text-stone-700">Generators & Tools</button>
+            <button onclick="filterCategory('ip-docs')" id="filter-ip-docs" class="filter-btn text-xs font-semibold px-4 py-2 rounded-xl border transition-all bg-white text-stone-700">Patents & Docs</button>
         </div>
-        <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Search tools or files..." class="w-full md:w-72 px-4 py-2 border border-stone-300 rounded-xl text-xs bg-white">
+        <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Search tools, files, patents..." class="w-full md:w-72 px-4 py-2 border border-stone-300 rounded-xl text-xs bg-white">
     </div>
 
     <!-- MAIN CONTENT -->
@@ -57,7 +58,7 @@
             <h2 class="serif-title text-2xl font-bold text-stone-900 mb-6 pb-2 border-b border-stone-200">1. Void Percentage (VP) Software Progressions</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 
-                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="progression" data-keywords="1_initial_nochamfer.html">
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="progression" data-keywords="1_initial_nochamfer.html stage 00 base core">
                     <div>
                         <span class="text-[9px] uppercase font-bold tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded">Stage 00</span>
                         <h3 class="font-bold text-stone-900 text-sm mt-2">Initial Base Core: No Chamfer</h3>
@@ -67,17 +68,17 @@
                     <a href="1_INITIAL_NOCHAMFER.html" target="_blank" class="mt-4 bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center">Open Base Core &rarr;</a>
                 </div>
 
-                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="progression" data-keywords="vp.html vp_new.html 2_chamfer.html">
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="progression" data-keywords="vp.html stage 01 chamfer cut sandbox">
                     <div>
                         <span class="text-[9px] uppercase font-bold tracking-wider bg-amber-50 text-amber-700 px-2 py-0.5 rounded">Stage 01</span>
                         <h3 class="font-bold text-stone-900 text-sm mt-2">VP Engine (Base Chamfer)</h3>
-                        <p class="text-[10px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded mono-text my-2">VP.html / VP_new.html</p>
+                        <p class="text-[10px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded mono-text my-2">VP.html</p>
                         <p class="text-xs text-stone-600">CNC toolpath profiling with interlocking edge profiles.</p>
                     </div>
                     <a href="VP.html" target="_blank" class="mt-4 bg-stone-900 hover:bg-amber-800 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center">Open Cut Sandbox &rarr;</a>
                 </div>
 
-                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="progression" data-keywords="vp_multirow.html 3_samevp_multirow.html">
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="progression" data-keywords="vp_multirow.html stage 02 multirow array">
                     <div>
                         <span class="text-[9px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2 py-0.5 rounded">Stage 02</span>
                         <h3 class="font-bold text-stone-900 text-sm mt-2">Multi-Row Array Framework</h3>
@@ -87,7 +88,7 @@
                     <a href="VP_multirow.html" target="_blank" class="mt-4 bg-stone-900 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center">Open Array Compiler &rarr;</a>
                 </div>
 
-                <div class="card-item bg-white p-5 rounded-2xl border border-indigo-200 shadow-sm flex flex-col justify-between ring-2 ring-indigo-600/10" data-category="progression" data-keywords="finalmix_differentvp.html 4_differet vp_multirow.html">
+                <div class="card-item bg-white p-5 rounded-2xl border border-indigo-200 shadow-sm flex flex-col justify-between ring-2 ring-indigo-600/10" data-category="progression" data-keywords="finalmix_differentvp.html stage 03 variable vp grid modulator">
                     <div>
                         <span class="text-[9px] uppercase font-bold tracking-wider bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded">Stage 03</span>
                         <h3 class="font-bold text-stone-900 text-sm mt-2">Variable VP Grid Modulator</h3>
@@ -105,7 +106,7 @@
             <h2 class="serif-title text-2xl font-bold text-stone-900 mb-6 pb-2 border-b border-stone-200">2. Physics Engine & Pattern Generators</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                <div class="card-item bg-white p-5 rounded-2xl border border-rose-300 shadow-sm flex flex-col justify-between ring-2 ring-rose-600/20" data-category="generators" data-keywords="jaali_simulator_v7.2_final.html physics simulation cfd fea">
+                <div class="card-item bg-white p-5 rounded-2xl border border-rose-300 shadow-sm flex flex-col justify-between ring-2 ring-rose-600/20" data-category="generators" data-keywords="jaali_simulator_v7.2_final.html physics simulation cfd fea venturi thermal lighting">
                     <div>
                         <span class="text-[9px] uppercase font-bold tracking-wider bg-rose-100 text-rose-800 px-2 py-0.5 rounded">Physics Engine v7.2</span>
                         <h3 class="font-bold text-stone-900 text-base mt-2">Multi-Physics Simulation Suite</h3>
@@ -115,7 +116,7 @@
                     <a href="Jaali_Simulator_v7.2_Final.html" target="_blank" class="mt-4 bg-rose-900 hover:bg-rose-950 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center">Launch Physics Engine &rarr;</a>
                 </div>
 
-                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="generators" data-keywords="grid_parametric.html">
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="generators" data-keywords="grid_parametric.html tile rotation jitter">
                     <div>
                         <span class="text-[9px] uppercase font-bold tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded">System 01</span>
                         <h3 class="font-bold text-stone-900 text-base mt-2">Parametric Jaali Generator</h3>
@@ -125,17 +126,17 @@
                     <a href="grid_parametric.html" target="_blank" class="mt-4 bg-stone-900 hover:bg-indigo-700 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center">Launch Engine &rarr;</a>
                 </div>
 
-                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="generators" data-keywords="jaalicreator.html mughal">
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="generators" data-keywords="jaalicreator.html mughal pattern creator star polygon">
                     <div>
                         <span class="text-[9px] uppercase font-bold tracking-wider bg-amber-50 text-amber-800 px-2 py-0.5 rounded">System 02</span>
                         <h3 class="font-bold text-stone-900 text-base mt-2">Mughal Pattern Creator</h3>
-                        <p class="text-[11px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded mono-text my-2">JAALICREATOR.HTML</p>
+                        <p class="text-[11px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded mono-text my-2">JAALICREATOR.html</p>
                         <p class="text-xs text-stone-600">Star and polygon traditional compositions.</p>
                     </div>
-                    <a href="JAALICREATOR.HTML" target="_blank" class="mt-4 bg-stone-900 hover:bg-amber-800 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center">Launch Creator &rarr;</a>
+                    <a href="JAALICREATOR.html" target="_blank" class="mt-4 bg-stone-900 hover:bg-amber-800 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center">Launch Creator &rarr;</a>
                 </div>
 
-                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="generators" data-keywords="jaalivoidslider.html">
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="generators" data-keywords="jaalivoidslider.html pixel analyzer erosion dilation">
                     <div>
                         <span class="text-[9px] uppercase font-bold tracking-wider bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded">System 03</span>
                         <h3 class="font-bold text-stone-900 text-base mt-2">Image Void Slider & Analyzer</h3>
@@ -145,6 +146,77 @@
                     <a href="jaalivoidslider.html" target="_blank" class="mt-4 bg-stone-900 hover:bg-emerald-800 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center">Launch Analyzer &rarr;</a>
                 </div>
 
+            </div>
+        </section>
+
+        <!-- SECTION 3: INTELLECTUAL PROPERTY & DOCUMENTATION -->
+        <section>
+            <h2 class="serif-title text-2xl font-bold text-stone-900 mb-6 pb-2 border-b border-stone-200">3. Patents & Academic Documentation</h2>
+            <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-stone-200 text-left text-xs">
+                        <thead class="bg-stone-50 text-stone-600 font-semibold uppercase tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4">Document / Artifact Title</th>
+                                <th class="px-6 py-4">Classification</th>
+                                <th class="px-6 py-4">Scope / Focus</th>
+                                <th class="px-6 py-4 text-right">Access Link</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100 text-stone-700">
+                            
+                            <tr class="card-item hover:bg-stone-50/60" data-category="ip-docs" data-keywords="granted patent in590898 b1 granted_patent_specification_590898.pdf">
+                                <td class="px-6 py-4 font-bold text-stone-900">System for Forming Three-Dimensional Geometric Structures</td>
+                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-[10px] rounded-md bg-purple-100 text-purple-800 font-bold uppercase">Granted Patent</span></td>
+                                <td class="px-6 py-4 text-stone-600 font-mono text-[11px]">IN590898 B1 — Full Patent Specification & Claims</td>
+                                <td class="px-6 py-4 text-right"><a href="GRANTED_PATENT_SPECIFICATION_590898.pdf" target="_blank" class="text-indigo-700 hover:text-indigo-900 font-semibold">View PDF &rarr;</a></td>
+                            </tr>
+
+                            <tr class="card-item hover:bg-stone-50/60" data-category="ip-docs" data-keywords="modular block design registration blocks_design_registration.pdf">
+                                <td class="px-6 py-4 font-semibold text-stone-900">Modular Block Design Registration</td>
+                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-[10px] rounded-md bg-blue-100 text-blue-800 font-bold uppercase">Design Reg</span></td>
+                                <td class="px-6 py-4 text-stone-500">Interlocking component forms & structural edge configurations</td>
+                                <td class="px-6 py-4 text-right"><a href="BLOCKS_Design_Registration.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                            </tr>
+
+                            <tr class="card-item hover:bg-stone-50/60" data-category="ip-docs" data-keywords="modular casting mould design registration mould_design_registration.pdf">
+                                <td class="px-6 py-4 font-semibold text-stone-900">Modular Casting Mould Design Registration</td>
+                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-[10px] rounded-md bg-blue-100 text-blue-800 font-bold uppercase">Design Reg</span></td>
+                                <td class="px-6 py-4 text-stone-500">Flexible core stump configurations for variable cast outputs</td>
+                                <td class="px-6 py-4 text-right"><a href="Mould_Design_Registration.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                            </tr>
+
+                            <tr class="card-item hover:bg-stone-50/60" data-category="ip-docs" data-keywords="3d puzzle systems 3dpuzzles.pdf">
+                                <td class="px-6 py-4 font-semibold text-stone-900">Interlocking 3D Puzzle Systems</td>
+                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-[10px] rounded-md bg-blue-100 text-blue-800 font-bold uppercase">Design Reg</span></td>
+                                <td class="px-6 py-4 text-stone-500">Educational/recreational multi-directional tool-free frameworks</td>
+                                <td class="px-6 py-4 text-right"><a href="3DPUZZLES.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                            </tr>
+
+                            <tr class="card-item hover:bg-stone-50/60" data-category="ip-docs" data-keywords="utility patent application utility_patent_application.pdf">
+                                <td class="px-6 py-4 font-semibold text-stone-900">Utility Application for Modular Triangular Screen System</td>
+                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-[10px] rounded-md bg-amber-100 text-amber-800 font-bold uppercase">Utility Draft</span></td>
+                                <td class="px-6 py-4 text-stone-500">Underpinning parameters and frameless installation descriptions</td>
+                                <td class="px-6 py-4 text-right"><a href="Utility_Patent_Application.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                            </tr>
+
+                            <tr class="card-item hover:bg-stone-50/60" data-category="ip-docs" data-keywords="thesis chapter elastic vernacular doing_14what.pdf">
+                                <td class="px-6 py-4 font-semibold text-stone-900">Chapter 1 Excerpt: The Elastic Vernacular</td>
+                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-[10px] rounded-md bg-stone-200 text-stone-700 font-bold uppercase">Thesis Text</span></td>
+                                <td class="px-6 py-4 text-stone-500">Theoretical critiques of digital hylomorphism vs. parametric craft</td>
+                                <td class="px-6 py-4 text-right"><a href="doing_14what.pdf" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View PDF &rarr;</a></td>
+                            </tr>
+
+                            <tr class="card-item hover:bg-stone-50/60" data-category="ip-docs" data-keywords="trigonometric math derivations void_percentage_calculation.docx">
+                                <td class="px-6 py-4 font-semibold text-stone-900">Mathematical Trigonometry Derivations</td>
+                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-[10px] rounded-md bg-stone-200 text-stone-700 font-bold uppercase">Derivations</span></td>
+                                <td class="px-6 py-4 text-stone-500">Coordinate mapping scripts ($\sin 30^\circ$, centroid limits, thickness ratios)</td>
+                                <td class="px-6 py-4 text-right"><a href="Void_Percentage_Calculation.docx" target="_blank" class="text-indigo-600 hover:text-indigo-900 font-medium">View DOCX &rarr;</a></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
