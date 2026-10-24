@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mughal Jaali Pattern Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F5F2; /* Sandstone off-white */
+            color: #4A4A4A;
+        }
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+        .controls-panel {
+            background-color: #FFFFFF;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-right: 1px solid #EAEAEA;
+        }
+        .control-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #EAEAEA;
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #A87E4F; /* Muted gold */
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #A87E4F;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .btn-generate {
+            background-color: #A87E4F;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .btn-generate:hover {
+            background-color: #8C663B;
+        }
+        .jaali-canvas {
+            background-color: #FDFDFD;
+            background-image: linear-gradient(rgba(200, 180, 160, 0.05) .1em, transparent .1em), linear-gradient(90deg, rgba(200, 180, 160, 0.05) .1em, transparent .1em);
+            background-size: 2em 2em;
+        }
+    </style>
+</head>
+<body class="overflow-hidden">
+    <div class="flex h-screen">
+        <!-- CONTROLS PANEL -->
+        <div id="controls-panel" class="w-full md:w-1/3 lg:w-1/4 h-full p-6 overflow-y-auto controls-panel">
+            <h1 class="text-3xl title-font text-[#8C663B] mb-2">Jaali Generator</h1>
+            <p class="text-sm mb-6 text-gray-500">Design traditional Mughal lattice patterns.</p>
+
+            <div class="space-y-6">
+                <!-- Base Polygon -->
+                <div>
+                    <label for="basePolygon" class="control-label block">Base Polygon</label>
+                    <select id="basePolygon" class="w-full p-2 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#A87E4F] focus:border-[#A87E4F]">
+                        <option value="6" selected>Hexagon</option>
+                        <option value="8">Octagon</option>
+                        <option value="10">Decagon</option>
+                        <option value="4">Square</option>
+                    </select>
+                </div>
+
+                <!-- Pattern Family -->
+                <div>
+                    <label for="patternFamily" class="control-label block">Pattern Family</label>
+                    <select id="patternFamily" class="w-full p-2 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#A87E4F] focus:border-[#A87E4F]">
+                        <option value="median" selected>Median</option>
+                        <option value="acute">Acute</option>
+                        <option value="obtuse">Obtuse</option>
+                    </select>
+                </div>
+                
+                <!-- Edge Division Ratio -->
+                <div>
+                    <label for="edgeDivisionRatio" class="control-label block">Edge Division Ratio</label>
+                    <input type="text" id="edgeDivisionRatio" value="1/2" class="w-full p-2 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#A87E4F] focus:border-[#A87E4F]">
+                </div>
+
+                <!-- Grid Size -->
+                <div>
+                    <label class="control-label block">Grid Size (Cols x Rows)</label>
+                    <div class="flex space-x-2">
+                        <input type="number" id="gridCols" value="5" min="1" class="w-1/2 p-2 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#A87E4F] focus:border-[#A87E4F]">
+                        <input type="number" id="gridRows" value="5" min="1" class="w-1/2 p-2 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#A87E4F] focus:border-[#A87E4F]">
+                    </div>
+                </div>
+
+                <!-- S:V Ratio -->
+                <div>
+                    <label for="svRatio" class="control-label block">Solid-to-Void Ratio</label>
+                     <div class="flex items-center space-x-4">
+                        <input type="range" id="svRatio" min="0.0" max="1" step="0.01" value="0.2" class="w-full">
+                        <span id="svRatio-value" class="font-semibold text-[#A87E4F] w-10 text-center">0.20</span>
+                    </div>
+                </div>
+
+                <!-- Generate Button -->
+                <button id="generateBtn" class="w-full py-3 rounded-md font-bold text-lg btn-generate">
+                    Generate Pattern
+                </button>
+            </div>
+        </div>
+
+        <!-- JAALI DISPLAY -->
+        <div class="w-full md:w-2/3 lg:w-3/4 h-screen jaali-canvas flex items-center justify-center p-4">
+            <svg id="jaaliSvg" width="100%" height="100%"></svg>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM Elements ---
+        const controls = {
+            basePolygon: document.getElementById('basePolygon'),
+            patternFamily: document.getElementById('patternFamily'),
+            edgeDivisionRatio: document.getElementById('edgeDivisionRatio'),
+            gridCols: document.getElementById('gridCols'),
+            gridRows: document.getElementById('gridRows'),
+            svRatio: document.getElementById('svRatio'),
+            svRatioValue: document.getElementById('svRatio-value'),
+            generateBtn: document.getElementById('generateBtn'),
+            svg: document.getElementById('jaaliSvg'),
+        };
+        
+        // --- Event Listeners ---
+        controls.generateBtn.addEventListener('click', drawJaali);
+        controls.svRatio.addEventListener('input', () => {
+            controls.svRatioValue.textContent = parseFloat(controls.svRatio.value).toFixed(2);
+        });
+        
+        // --- Main Drawing Logic ---
+        function drawJaali() {
+            controls.svg.innerHTML = ''; // Clear previous pattern
+
+            // --- Get Input Values ---
+            const baseSides = parseInt(controls.basePolygon.value);
+            const starPoints = baseSides; // Star points now match the base polygon sides.
+            const family = controls.patternFamily.value;
+            const ratio = parseRatio(controls.edgeDivisionRatio.value);
+            const complexity = 1; // Complexity is now fixed for a simpler pattern.
+            const cols = parseInt(controls.gridCols.value);
+            const rows = parseInt(controls.gridRows.value);
+            const svRatio = parseFloat(controls.svRatio.value);
+
+            const svgBounds = controls.svg.getBoundingClientRect();
+            
+            // --- Calculate Geometry ---
+            const hexWidth = svgBounds.width / (cols + 0.5);
+            const hexHeight = svgBounds.height / (rows + 0.5);
+            const radius = Math.min(hexWidth / Math.sqrt(3), hexHeight / 2) * 0.95;
+            
+            // --- Corrected S:V Ratio Logic ---
+            // The slider now controls the size of the "void" cutouts.
+            // We calculate a "void ratio" which is the inverse of the solid ratio from the slider.
+            const voidRatio = 1.0 - svRatio;
+            const minStrokeWidth = 0;
+            const maxStrokeWidth = radius / 2; // A large width that will create a very open pattern.
+            // Interpolate the stroke width for the voids based on the voidRatio.
+            const strokeWidth = minStrokeWidth + (maxStrokeWidth - minStrokeWidth) * voidRatio;
+
+            const cellWidth = radius * 2 * (Math.sqrt(3) / 2);
+            const cellHeight = radius * 2;
+
+            // --- Tessellation Loop ---
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    let cx = (c * cellWidth) + cellWidth/2;
+                    let cy = (r * cellHeight * 0.75) + cellHeight/2;
+
+                    // Offset for hexagonal grid
+                    if (r % 2 !== 0) {
+                        cx += cellWidth / 2;
+                    }
+
+                    // Create a group for each cell
+                    const g = createSVGElement('g');
+                    g.setAttribute('transform', `translate(${cx}, ${cy})`);
+                    controls.svg.append(g);
+                    
+                    // --- 1. Draw Mirror Line for Tessellation ---
+                    drawMirrorLine(g, baseSides, radius);
+
+                    // --- 2. Draw Solid Base ---
+                    drawSolidBase(g, baseSides, radius);
+
+                    // --- 3. Generate Pattern by "Carving Voids" ---
+                    generatePattern(g, baseSides, radius, ratio, family, starPoints, strokeWidth);
+                }
+            }
+        }
+
+        /**
+         * Generates the pattern by drawing the "voids" over a solid base.
+         */
+        function generatePattern(parentGroup, sides, R, ratio, family, starPoints, strokeW) {
+            if (strokeW <= 0) return; // Don't draw if there's no void.
+
+            const vertices = getPolygonVertices(sides, R);
+            const edgePoints = [];
+
+            // Calculate division points on each edge
+            for (let i = 0; i < sides; i++) {
+                const p1 = vertices[i];
+                const p2 = vertices[(i + 1) % sides];
+                edgePoints.push({
+                    x: p1.x * (1 - ratio) + p2.x * ratio,
+                    y: p1.y * (1 - ratio) + p2.y * ratio,
+                });
+            }
+            
+            // Draw star polygon connecting edge points
+            const step = getFamilyStep(family, starPoints);
+            for (let i = 0; i < starPoints; i++) {
+                const p1 = edgePoints[i];
+                const p2 = edgePoints[(i + step) % starPoints];
+                const line = createSVGElement('line');
+                setAttributes(line, {
+                    x1: p1.x, y1: p1.y,
+                    x2: p2.x, y2: p2.y,
+                    stroke: '#FDFDFD', // Use background color to "carve" the void
+                    'stroke-width': strokeW,
+                    'stroke-linecap': 'round'
+                });
+                parentGroup.appendChild(line);
+            }
+        }
+
+        /**
+         * Draws the faint outline for each tessellated polygon.
+         */
+        function drawMirrorLine(parentGroup, sides, radius) {
+            const points = getPolygonVertices(sides, radius).map(p => `${p.x},${p.y}`).join(' ');
+            const polygon = createSVGElement('polygon');
+            setAttributes(polygon, {
+                points: points,
+                fill: 'none',
+                stroke: '#D1CFCB', // A light grey for the grout/mirror line
+                'stroke-width': 1
+            });
+            parentGroup.appendChild(polygon);
+        }
+
+        /**
+         * Draws the solid base color for the polygon before voids are carved.
+         */
+        function drawSolidBase(parentGroup, sides, radius) {
+            const points = getPolygonVertices(sides, radius).map(p => `${p.x},${p.y}`).join(' ');
+            const polygon = createSVGElement('polygon');
+            setAttributes(polygon, {
+                points: points,
+                fill: '#4A3B2A' // The main solid color of the Jaali
+            });
+            parentGroup.appendChild(polygon);
+        }
+
+        // --- Helper Functions ---
+
+        function getPolygonVertices(sides, radius, centerX = 0, centerY = 0) {
+            const vertices = [];
+            for (let i = 0; i < sides; i++) {
+                const angle = (i / sides) * 2 * Math.PI - Math.PI / 2; // Start from top
+                vertices.push({
+                    x: centerX + radius * Math.cos(angle),
+                    y: centerY + radius * Math.sin(angle)
+                });
+            }
+            return vertices;
+        }
+        
+        function getFamilyStep(family, sides) {
+            switch(family) {
+                case 'acute': return Math.floor(sides / 2);
+                case 'obtuse': return 1;
+                case 'median':
+                default:
+                    return 2;
+            }
+        }
+        
+        function parseRatio(str) {
+            if (str.includes('/')) {
+                const [num, den] = str.split('/').map(Number);
+                return den === 0 ? 0.5 : num / den;
+            }
+            const val = parseFloat(str);
+            return isNaN(val) ? 0.5 : val;
+        }
+
+        function createSVGElement(tag) {
+            return document.createElementNS('http://www.w3.org/2000/svg', tag);
+        }
+
+        function setAttributes(el, attrs) {
+            for (let key in attrs) {
+                el.setAttribute(key, attrs[key]);
+            }
+        }
+        
+        // --- Initial Draw ---
+        window.onload = () => {
+            // A slight delay ensures correct SVG bounds calculation
+            setTimeout(drawJaali, 100); 
+        };
+        window.onresize = drawJaali;
+
+    </script>
+</body>
+</html>
+
+
