@@ -27,7 +27,7 @@
                 Modular Triangular Screen System with Complementary Interlocking Components
             </h1>
             <p class="mt-4 text-stone-600 max-w-3xl mx-auto text-base sm:text-lg">
-                Parametric Modules, Pattern Generators, Multi-Physics Simulation Engines, and Intellectual Property Artifacts
+                Parametric Modules, Pattern Generators, Multi-Physics Simulation Engines, and Academic Documentation
             </p>
             
             <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center border-t border-stone-200 pt-6 max-w-3xl mx-auto text-xs text-stone-600 font-medium">
@@ -45,9 +45,9 @@
             <button onclick="filterCategory('all')" id="filter-all" class="filter-btn active text-xs font-semibold px-4 py-2 rounded-xl border transition-all">All Files</button>
             <button onclick="filterCategory('progression')" id="filter-progression" class="filter-btn text-xs font-semibold px-4 py-2 rounded-xl border transition-all bg-white text-stone-700">VP Progressions</button>
             <button onclick="filterCategory('generators')" id="filter-generators" class="filter-btn text-xs font-semibold px-4 py-2 rounded-xl border transition-all bg-white text-stone-700">Generators & Tools</button>
-            <button onclick="filterCategory('ip-docs')" id="filter-ip-docs" class="filter-btn text-xs font-semibold px-4 py-2 rounded-xl border transition-all bg-white text-stone-700">Patents & Docs</button>
+            <button onclick="filterCategory('ip-docs')" id="filter-ip-docs" class="filter-btn text-xs font-semibold px-4 py-2 rounded-xl border transition-all bg-white text-stone-700">Design & Docs</button>
         </div>
-        <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Search tools, files, patents..." class="w-full md:w-72 px-4 py-2 border border-stone-300 rounded-xl text-xs bg-white">
+        <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Search tools, files, documents..." class="w-full md:w-72 px-4 py-2 border border-stone-300 rounded-xl text-xs bg-white">
     </div>
 
     <!-- MAIN CONTENT -->
@@ -149,9 +149,9 @@
             </div>
         </section>
 
-        <!-- SECTION 3: INTELLECTUAL PROPERTY & DOCUMENTATION -->
+        <!-- SECTION 3: DESIGN REGISTRATIONS & DOCUMENTATION -->
         <section>
-            <h2 class="serif-title text-2xl font-bold text-stone-900 mb-6 pb-2 border-b border-stone-200">3. Patents & Academic Documentation</h2>
+            <h2 class="serif-title text-2xl font-bold text-stone-900 mb-6 pb-2 border-b border-stone-200">3. Design Registrations & Academic Documentation</h2>
             <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-stone-200 text-left text-xs">
@@ -165,13 +165,6 @@
                         </thead>
                         <tbody class="divide-y divide-stone-100 text-stone-700">
                             
-                            <tr class="card-item hover:bg-stone-50/60" data-category="ip-docs" data-keywords="granted patent in590898 b1 granted_patent_specification_590898.pdf">
-                                <td class="px-6 py-4 font-bold text-stone-900">System for Forming Three-Dimensional Geometric Structures</td>
-                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-[10px] rounded-md bg-purple-100 text-purple-800 font-bold uppercase">Granted Patent</span></td>
-                                <td class="px-6 py-4 text-stone-600 font-mono text-[11px]">IN590898 B1 — Full Patent Specification & Claims</td>
-                                <td class="px-6 py-4 text-right"><a href="GRANTED_PATENT_SPECIFICATION_590898.pdf" target="_blank" class="text-indigo-700 hover:text-indigo-900 font-semibold">View PDF &rarr;</a></td>
-                            </tr>
-
                             <tr class="card-item hover:bg-stone-50/60" data-category="ip-docs" data-keywords="modular block design registration blocks_design_registration.pdf">
                                 <td class="px-6 py-4 font-semibold text-stone-900">Modular Block Design Registration</td>
                                 <td class="px-6 py-4"><span class="px-2.5 py-1 text-[10px] rounded-md bg-blue-100 text-blue-800 font-bold uppercase">Design Reg</span></td>
