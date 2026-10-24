@@ -14,7 +14,6 @@ This repository serves as the digital appendix and interactive software compendi
 - **Main Dashboard**: [View Live Repository Dashboard](https://gogulapatisreepradamiad16-blip.github.io/PhD/)
 - **Multi-Physics Engine v7.2**: Solvers for Von Mises FEA stress, Venturi CFD airflow, thermal cooling, and daylight glare.
 - **Parametric Pattern Generators**: Interactive tools for tile rotation, hole modulation, and traditional geometric lattice designs.
-- **Academic Documentation**: Design registrations, utility application drafts, thesis excerpts, and mathematical derivations.
 
 ---
 
