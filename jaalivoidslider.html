@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Pattern Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .canvas-container {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            background-color: white;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            background-color: #e5e7eb;
+        }
+        .control-panel {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .slider { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: #d1d5db; border-radius: 5px; outline: none; opacity: 0.7; transition: opacity .2s; }
+        .slider:hover { opacity: 1; }
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; background: #4f46e5; border-radius: 50%; cursor: pointer; }
+        .slider::-moz-range-thumb { width: 20px; height: 20px; background: #4f46e5; border-radius: 50%; cursor: pointer; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="antialiased text-gray-800 p-4 sm:p-6 lg:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Image Pattern Analyzer</h1>
+            <p class="mt-2 text-lg text-gray-600">Upload an image and see the magic happen.</p>
+        </div>
+        
+        <!-- Controls -->
+        <div class="control-panel mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                 <div>
+                    <label for="imageLoader" class="block text-sm font-medium text-gray-700 mb-2">Upload your image</label>
+                    <input type="file" id="imageLoader" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"/>
+                </div>
+                <div class="flex items-center justify-center h-full">
+                     <div id="loader" class="loader hidden"></div>
+                </div>
+            </div>
+           
+            <div id="processing-controls" class="hidden mt-6 space-y-6">
+                <!-- Threshold Control -->
+                <div>
+                    <label for="threshold" class="block text-sm font-medium text-gray-700">Black & White Threshold: <span id="thresholdValue" class="font-bold">128</span></label>
+                    <input type="range" id="threshold" min="0" max="255" value="128" class="slider mt-2">
+                </div>
+
+                <!-- Solid/Void Ratio Control -->
+                <div>
+                    <label for="ratio" class="block text-sm font-medium text-gray-700">Manipulate Solid/Void Ratio: <span id="ratioValue" class="font-bold">0 (Original)</span></label>
+                    <input type="range" id="ratio" min="-25" max="25" value="0" class="slider mt-2">
+                    <div class="text-xs text-gray-500 flex justify-between mt-1">
+                        <span>Thinner (Erode)</span>
+                        <span>Thicker (Dilate)</span>
+                    </div>
+                     <!-- New section for custom void % -->
+                    <div class="mt-4 flex items-center space-x-2">
+                        <label for="targetVoid" class="block text-sm font-medium text-gray-700 whitespace-nowrap">Set Target Void %:</label>
+                        <input type="number" id="targetVoid" min="0" max="100" step="0.1" placeholder="e.g. 65.5" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
+                        <button id="applyTargetVoid" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Set</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvases -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div class="canvas-container">
+                <h2 class="text-lg font-semibold p-4 border-b">1. Original Image</h2>
+                <canvas id="originalCanvas"></canvas>
+            </div>
+            <div class="canvas-container">
+                <h2 class="text-lg font-semibold p-4 border-b">2. Black & White</h2>
+                <canvas id="bwCanvas"></canvas>
+            </div>
+            <div class="canvas-container">
+                <h2 class="text-lg font-semibold p-4 border-b">3. Boundaries Detected</h2>
+                <canvas id="edgeCanvas"></canvas>
+            </div>
+            <div class="canvas-container">
+                <h2 class="text-lg font-semibold p-4 border-b">4. Manipulated Pattern</h2>
+                <div class="p-4 bg-gray-50 border-t">
+                    <p class="text-sm font-medium">Solid: <span id="solidPercent" class="font-bold text-indigo-600">0%</span></p>
+                    <p class="text-sm font-medium">Void: <span id="voidPercent" class="font-bold text-indigo-600">0%</span></p>
+                </div>
+                <canvas id="manipulatedCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const imageLoader = document.getElementById('imageLoader');
+        const originalCanvas = document.getElementById('originalCanvas');
+        const bwCanvas = document.getElementById('bwCanvas');
+        const edgeCanvas = document.getElementById('edgeCanvas');
+        const manipulatedCanvas = document.getElementById('manipulatedCanvas');
+        
+        const thresholdSlider = document.getElementById('threshold');
+        const ratioSlider = document.getElementById('ratio');
+        const targetVoidInput = document.getElementById('targetVoid');
+        const applyTargetVoidButton = document.getElementById('applyTargetVoid');
+
+        const thresholdValueSpan = document.getElementById('thresholdValue');
+        const ratioValueSpan = document.getElementById('ratioValue');
+        
+        const solidPercentSpan = document.getElementById('solidPercent');
+        const voidPercentSpan = document.getElementById('voidPercent');
+        
+        const loader = document.getElementById('loader');
+        const processingControls = document.getElementById('processing-controls');
+
+        const originalCtx = originalCanvas.getContext('2d');
+        const bwCtx = bwCanvas.getContext('2d');
+        const edgeCtx = edgeCanvas.getContext('2d');
+        const manipulatedCtx = manipulatedCanvas.getContext('2d');
+
+        let originalImageData = null;
+
+        // --- Event Listeners ---
+        imageLoader.addEventListener('change', e => loadImage(e.target.files[0]));
+        thresholdSlider.addEventListener('input', () => {
+            thresholdValueSpan.textContent = thresholdSlider.value;
+            if (originalImageData) processImage();
+        });
+        ratioSlider.addEventListener('input', () => {
+            const value = parseInt(ratioSlider.value);
+            ratioValueSpan.textContent = value === 0 ? '0 (Original)' : value;
+            if (originalImageData) processImage();
+        });
+        applyTargetVoidButton.addEventListener('click', setCustomVoidPercentage);
+        
+        // --- Initial Load ---
+        window.onload = () => {
+            const defaultImageUrl = '3a6374bc9a2508ad1ab362a6d2ac5569.jpg'; // The uploaded image
+            loader.classList.remove('hidden');
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = () => {
+                drawImageToCanvas(img);
+                processingControls.classList.remove('hidden');
+                processImage();
+                loader.classList.add('hidden');
+            };
+            img.onerror = () => {
+                 loader.classList.add('hidden');
+                 // Don't use alert
+                 console.error("Could not load the default image. Please upload an image to start.");
+            }
+            img.src = defaultImageUrl;
+        };
+
+        // --- Core Functions ---
+        function loadImage(file) {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    drawImageToCanvas(img);
+                    processingControls.classList.remove('hidden');
+                    processImage();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function drawImageToCanvas(img) {
+            const aspectRatio = img.height / img.width;
+            const maxWidth = 500;
+            const canvasWidth = Math.min(img.width, maxWidth);
+            const canvasHeight = canvasWidth * aspectRatio;
+
+            [originalCanvas, bwCanvas, edgeCanvas, manipulatedCanvas].forEach(canvas => {
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+            });
+            
+            originalCtx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+            originalImageData = originalCtx.getImageData(0, 0, canvasWidth, canvasHeight);
+        }
+
+        function processImage() {
+            if (!originalImageData) return;
+            
+            loader.classList.remove('hidden');
+
+            setTimeout(() => {
+                const grayscaleData = toGrayscale(originalImageData);
+                const bwImageData = toBlackAndWhite(grayscaleData, parseInt(thresholdSlider.value));
+                bwCtx.putImageData(bwImageData, 0, 0);
+
+                const edgeImageData = detectEdges(grayscaleData);
+                edgeCtx.putImageData(edgeImageData, 0, 0);
+
+                const ratioValue = parseInt(ratioSlider.value);
+                const manipulatedData = manipulateRatio(bwImageData, ratioValue);
+                manipulatedCtx.putImageData(manipulatedData, 0, 0);
+                
+                calculateAndDisplayStats(manipulatedData);
+                
+                loader.classList.add('hidden');
+            }, 50);
+        }
+
+        // --- Image Processing Algorithms ---
+        function toGrayscale(imageData) {
+            const data = new Uint8ClampedArray(imageData.data);
+            for (let i = 0; i < data.length; i += 4) {
+                const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                data[i] = data[i + 1] = data[i + 2] = gray;
+            }
+            return new ImageData(data, imageData.width, imageData.height);
+        }
+
+        function toBlackAndWhite(grayscaleData, threshold) {
+            const data = new Uint8ClampedArray(grayscaleData.data);
+            for (let i = 0; i < data.length; i += 4) {
+                const value = data[i] < threshold ? 0 : 255;
+                data[i] = data[i + 1] = data[i + 2] = value;
+            }
+            return new ImageData(data, grayscaleData.width, grayscaleData.height);
+        }
+
+        function detectEdges(grayscaleData) {
+            const width = grayscaleData.width;
+            const height = grayscaleData.height;
+            const src = grayscaleData.data;
+            const dstData = new Uint8ClampedArray(width * height * 4);
+            const kernelX = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]];
+            const kernelY = [[-1, -2, -1], [0, 0, 0], [1, 2, 1]];
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    let pixelX = 0, pixelY = 0;
+                    for (let j = -1; j <= 1; j++) {
+                        for (let i = -1; i <= 1; i++) {
+                            const gray = src[((y + j) * width + (x + i)) * 4];
+                            pixelX += gray * kernelX[j + 1][i + 1];
+                            pixelY += gray * kernelY[j + 1][i + 1];
+                        }
+                    }
+                    const magnitude = Math.sqrt(pixelX * pixelX + pixelY * pixelY);
+                    const dstIndex = (y * width + x) * 4;
+                    dstData[dstIndex] = dstData[dstIndex + 1] = dstData[dstIndex + 2] = magnitude;
+                    dstData[dstIndex + 3] = 255;
+                }
+            }
+            return new ImageData(dstData, width, height);
+        }
+
+        function manipulateRatio(bwImageData, iterations) {
+            if (iterations === 0) return bwImageData;
+            let srcData = new Uint8ClampedArray(bwImageData.data);
+            const operation = iterations > 0 ? dilate : erode;
+            for(let i = 0; i < Math.abs(iterations); i++) {
+                srcData = operation(srcData, bwImageData.width, bwImageData.height);
+            }
+            return new ImageData(srcData, bwImageData.width, bwImageData.height);
+        }
+        
+        function erode(srcData, width, height) {
+            const dstData = new Uint8ClampedArray(srcData.length);
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    const currentIndex = (y * width + x) * 4;
+                    let isBoundary = false;
+                    for (let j = -1; j <= 1; j++) {
+                        for (let i = -1; i <= 1; i++) {
+                             if (srcData[((y + j) * width + (x + i)) * 4] === 255) {
+                                isBoundary = true; break;
+                            }
+                        }
+                        if (isBoundary) break;
+                    }
+                    const value = isBoundary ? 255 : 0;
+                    dstData[currentIndex] = dstData[currentIndex + 1] = dstData[currentIndex + 2] = value;
+                    dstData[currentIndex + 3] = 255;
+                }
+            }
+            return dstData;
+        }
+
+        function dilate(srcData, width, height) {
+             const dstData = new Uint8ClampedArray(srcData.length);
+             for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    const currentIndex = (y * width + x) * 4;
+                    let hasSolidNeighbor = false;
+                    for (let j = -1; j <= 1; j++) {
+                        for (let i = -1; i <= 1; i++) {
+                            if (srcData[((y + j) * width + (x + i)) * 4] === 0) {
+                                hasSolidNeighbor = true; break;
+                            }
+                        }
+                         if (hasSolidNeighbor) break;
+                    }
+                    const value = hasSolidNeighbor ? 0 : 255;
+                    dstData[currentIndex] = dstData[currentIndex + 1] = dstData[currentIndex + 2] = value;
+                    dstData[currentIndex + 3] = 255;
+                }
+            }
+            return dstData;
+        }
+
+        // --- New & Modified Functions for Custom Void ---
+        function calculateVoidPercent(imageData) {
+            const data = imageData.data;
+            let voidCount = 0;
+            const totalPixels = data.length / 4;
+            for (let i = 0; i < data.length; i += 4) {
+                if (data[i] === 255) voidCount++;
+            }
+            if (totalPixels === 0) return 0;
+            return (voidCount / totalPixels * 100);
+        }
+        
+        function setCustomVoidPercentage() {
+            const targetVoid = parseFloat(targetVoidInput.value);
+            if (isNaN(targetVoid) || targetVoid < 0 || targetVoid > 100) {
+                const originalBorder = targetVoidInput.style.borderColor;
+                targetVoidInput.style.borderColor = 'red';
+                targetVoidInput.placeholder = "Enter 0-100";
+                targetVoidInput.value = "";
+                setTimeout(() => {
+                    targetVoidInput.style.borderColor = originalBorder;
+                    targetVoidInput.placeholder = "e.g. 65.5";
+                }, 2000);
+                return;
+            }
+
+            loader.classList.remove('hidden');
+            processingControls.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                const grayscaleData = toGrayscale(originalImageData);
+                const baseBwImageData = toBlackAndWhite(grayscaleData, parseInt(thresholdSlider.value));
+                let currentImageData = baseBwImageData;
+                let currentVoid = calculateVoidPercent(currentImageData);
+                const operation = targetVoid > currentVoid ? erode : dilate;
+                const isApproachingFromBelow = targetVoid > currentVoid;
+                let iterations = 0;
+                const maxIterations = 50;
+
+                function step() {
+                    if (iterations >= maxIterations) {
+                        console.warn("Max iterations reached.");
+                        finish();
+                        return;
+                    }
+
+                    const newData = operation(new Uint8ClampedArray(currentImageData.data), currentImageData.width, currentImageData.height);
+                    currentImageData = new ImageData(newData, currentImageData.width, currentImageData.height);
+                    currentVoid = calculateVoidPercent(currentImageData);
+                    iterations++;
+                    
+                    manipulatedCtx.putImageData(currentImageData, 0, 0);
+                    calculateAndDisplayStats(currentImageData);
+
+                    const isTargetReached = isApproachingFromBelow ? (currentVoid >= targetVoid) : (currentVoid <= targetVoid);
+                    
+                    if (isTargetReached) {
+                        finish();
+                    } else {
+                        setTimeout(step, 10);
+                    }
+                }
+                
+                function finish() {
+                    const finalRatioValue = (operation === dilate) ? iterations : -iterations;
+                    ratioSlider.value = finalRatioValue;
+                    ratioValueSpan.textContent = finalRatioValue === 0 ? '0 (Original)' : finalRatioValue;
+                    loader.classList.add('hidden');
+                    processingControls.style.pointerEvents = 'auto';
+                }
+
+                step();
+            }, 50);
+        }
+
+        function calculateAndDisplayStats(imageData) {
+            const voidPercent = calculateVoidPercent(imageData);
+            const solidPercent = 100 - voidPercent;
+            solidPercentSpan.textContent = `${solidPercent.toFixed(2)}%`;
+            voidPercentSpan.textContent = `${voidPercent.toFixed(2)}%`;
+        }
+    </script>
+
+</body>
+</html>
+
