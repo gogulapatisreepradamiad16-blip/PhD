@@ -19,7 +19,7 @@
 
     <!-- HEADER -->
     <header class="border-b border-stone-200 bg-white py-12 px-6 text-center shadow-sm relative overflow-hidden">
-        <div class="max-w-5xl mx-auto relative z-10">
+        <div class="max-w-7xl mx-auto relative z-10">
             <span class="text-xs font-bold tracking-widest text-amber-800 uppercase bg-amber-50 border border-amber-200/60 px-4 py-1.5 rounded-full inline-block">
                 Doctoral Research Digital Compendium & Appendix
             </span>
@@ -46,4 +46,151 @@
             <button onclick="filterCategory('progression')" id="filter-progression" class="filter-btn text-xs font-semibold px-4 py-2 rounded-xl border transition-all bg-white text-stone-700">VP Progressions</button>
             <button onclick="filterCategory('generators')" id="filter-generators" class="filter-btn text-xs font-semibold px-4 py-2 rounded-xl border transition-all bg-white text-stone-700">Generators & Analyzers</button>
         </div>
-        <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Search tools
+        <input type="text" id="searchInput" onkeyup="searchCards()" placeholder="Search tools or software files..." class="w-full md:w-72 px-4 py-2 border border-stone-300 rounded-xl text-xs bg-white">
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-6 py-10 flex-grow w-full space-y-12">
+        
+        <!-- SECTION 1: VP PROGRESSIONS (CHRONOLOGICAL 5-STAGE PIPELINE) -->
+        <section>
+            <h2 class="serif-title text-2xl font-bold text-stone-900 mb-6 pb-2 border-b border-stone-200">1. Void Percentage (VP) Production Progressions</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5">
+                
+                <!-- STAGE 00 -->
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="progression" data-keywords="1_initial_nochamfer.html stage 00 base core">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded">Stage 00</span>
+                        <h3 class="font-bold text-stone-900 text-sm mt-2">Initial Base Core: No Chamfer</h3>
+                        <p class="text-[10px] font-medium text-stone-600 bg-stone-100 px-2 py-0.5 rounded mono-text my-2">1_INITIAL_NOCHAMFER.html</p>
+                        <p class="text-xs text-stone-600">Unchamfered geometry prototype baseline.</p>
+                    </div>
+                    <a href="1_INITIAL_NOCHAMFER.html" target="_blank" class="mt-4 bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center">Open Base Core &rarr;</a>
+                </div>
+
+                <!-- STAGE 01 -->
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="progression" data-keywords="vp.html stage 01 chamfer cut sandbox">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-wider bg-amber-50 text-amber-700 px-2 py-0.5 rounded">Stage 01</span>
+                        <h3 class="font-bold text-stone-900 text-sm mt-2">VP Engine (Base Chamfer)</h3>
+                        <p class="text-[10px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded mono-text my-2">VP.html</p>
+                        <p class="text-xs text-stone-600">CNC toolpath profiling with interlocking edge profiles.</p>
+                    </div>
+                    <a href="VP.html" target="_blank" class="mt-4 bg-stone-900 hover:bg-amber-800 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center">Open Cut Sandbox &rarr;</a>
+                </div>
+
+                <!-- STAGE 02 -->
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="progression" data-keywords="vp_multirow.html stage 02 multirow array">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2 py-0.5 rounded">Stage 02</span>
+                        <h3 class="font-bold text-stone-900 text-sm mt-2">Multi-Row Array Framework</h3>
+                        <p class="text-[10px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded mono-text my-2">VP_multirow.html</p>
+                        <p class="text-xs text-stone-600">Deploys continuous multi-row screen grids.</p>
+                    </div>
+                    <a href="VP_multirow.html" target="_blank" class="mt-4 bg-stone-900 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center">Open Array Compiler &rarr;</a>
+                </div>
+
+                <!-- STAGE 03 -->
+                <div class="card-item bg-white p-5 rounded-2xl border border-indigo-200 shadow-sm flex flex-col justify-between ring-2 ring-indigo-600/10" data-category="progression" data-keywords="4_differet vp_multirow.html stage 03 variable vp grid modulator">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-wider bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded">Stage 03</span>
+                        <h3 class="font-bold text-stone-900 text-sm mt-2">Variable VP Grid Modulator</h3>
+                        <p class="text-[10px] font-medium text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded mono-text my-2">4_Differet VP_multirow.html</p>
+                        <p class="text-xs text-stone-600">Cell-by-cell void percentage modulation grid.</p>
+                    </div>
+                    <a href="4_Differet%20VP_multirow.html" target="_blank" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center">Launch Modulator &rarr;</a>
+                </div>
+
+                <!-- STAGE 05 -->
+                <div class="card-item bg-white p-5 rounded-2xl border border-rose-300 shadow-sm flex flex-col justify-between ring-2 ring-rose-600/20" data-category="progression" data-keywords="jaali_simulator_v7.2_final.html stage 05 physics engine simulation suite fea cfd venturi thermal lighting">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-wider bg-rose-100 text-rose-800 px-2 py-0.5 rounded">Stage 05</span>
+                        <h3 class="font-bold text-stone-900 text-sm mt-2">FEA, CFD & Lighting Simulation Suite</h3>
+                        <p class="text-[10px] font-medium text-rose-800 bg-rose-50 px-2 py-0.5 rounded mono-text my-2">Jaali_Simulator_v7.2_Final.html</p>
+                        <p class="text-xs text-stone-600">Solvers for Von Mises FEA stress, Venturi CFD airflow, thermal cooling, and daylight glare.</p>
+                    </div>
+                    <a href="Jaali_Simulator_v7.2_Final.html" target="_blank" class="mt-4 bg-rose-900 hover:bg-rose-950 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center">Launch Simulation Suite &rarr;</a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 2: PATTERN GENERATORS & PERFORMANCE ANALYZERS -->
+        <section>
+            <h2 class="serif-title text-2xl font-bold text-stone-900 mb-6 pb-2 border-b border-stone-200">2. Pattern Generators & Performance Analyzers</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- SYSTEM 01 -->
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="generators" data-keywords="grid_parametric.html tile rotation jitter parametric jaali generator">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded">System 01</span>
+                        <h3 class="font-bold text-stone-900 text-base mt-2">Parametric Jaali Generator</h3>
+                        <p class="text-[11px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded mono-text my-2">grid_parametric.html</p>
+                        <p class="text-xs text-stone-600">Tile rotation, hole size, inset parameters, and jitter configurations.</p>
+                    </div>
+                    <a href="grid_parametric.html" target="_blank" class="mt-4 bg-stone-900 hover:bg-indigo-700 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center">Launch Engine &rarr;</a>
+                </div>
+
+                <!-- SYSTEM 02 -->
+                <div class="card-item bg-stone-50 p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between opacity-90 hover:opacity-100 transition-opacity" data-category="generators" data-keywords="repetationvariousjaali.html flower of life acute obtuse median">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-wider bg-stone-200 text-stone-600 px-2 py-0.5 rounded">v1.0 (Legacy)</span>
+                        <h3 class="font-semibold text-stone-800 text-base mt-2">Traditional Geometric Generator</h3>
+                        <p class="text-[11px] font-medium text-stone-500 bg-stone-200 px-2 py-0.5 rounded mono-text my-2">repetationvariousjaali.html</p>
+                        <p class="text-xs text-stone-500">Maps geometric sub-families (acute, median, obtuse) onto baseline matrices.</p>
+                    </div>
+                    <a href="repetationvariousjaali.html" target="_blank" class="mt-4 bg-stone-700 hover:bg-stone-800 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center">View Initial Build &rarr;</a>
+                </div>
+
+                <!-- SYSTEM 03 -->
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="generators" data-keywords="jaalicreator.html mughal pattern creator star polygon">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-wider bg-amber-50 text-amber-800 px-2 py-0.5 rounded">System 03</span>
+                        <h3 class="font-bold text-stone-900 text-base mt-2">Mughal Pattern Creator</h3>
+                        <p class="text-[11px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded mono-text my-2">JAALICREATOR.HTML</p>
+                        <p class="text-xs text-stone-600">Star and polygon traditional compositions.</p>
+                    </div>
+                    <a href="JAALICREATOR.HTML" target="_blank" class="mt-4 bg-stone-900 hover:bg-amber-800 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center">Launch Creator &rarr;</a>
+                </div>
+
+                <!-- SYSTEM 04 -->
+                <div class="card-item bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between" data-category="generators" data-keywords="jaalivoidslider.html pixel analyzer erosion dilation image void slider">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold tracking-wider bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded">System 04</span>
+                        <h3 class="font-bold text-stone-900 text-base mt-2">Image Void Slider & Analyzer</h3>
+                        <p class="text-[11px] font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded mono-text my-2">jaalivoidslider.html</p>
+                        <p class="text-xs text-stone-600">Erosion/dilation pixel transparency analyzer.</p>
+                    </div>
+                    <a href="jaalivoidslider.html" target="_blank" class="mt-4 bg-stone-900 hover:bg-emerald-800 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center">Launch Analyzer &rarr;</a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-900 text-stone-400 py-6 text-center text-xs border-t border-stone-800">
+        <p>&copy; 2026 Department of Design, Indian Institute of Technology Hyderabad. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function filterCategory(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`filter-${category}`).classList.add('active');
+            document.querySelectorAll('.card-item').forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                card.style.display = (category === 'all' || cardCat === category) ? '' : 'none';
+            });
+        }
+        function searchCards() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.card-item').forEach(card => {
+                const keywords = card.getAttribute('data-keywords').toLowerCase();
+                const text = card.innerText.toLowerCase();
+                card.style.display = (keywords.includes(query) || text.includes(query)) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>
